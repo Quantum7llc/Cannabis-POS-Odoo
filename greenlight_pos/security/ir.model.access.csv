@@ -16,3 +16,5 @@ access_shift_manager,greenlight.shift.manager,model_greenlight_shift,greenlight_
 access_cash_drawer_budtender,greenlight.cash.drawer.budtender,model_greenlight_cash_drawer,greenlight_pos.group_budtender,1,1,1,0
 access_cash_drawer_manager,greenlight.cash.drawer.manager,model_greenlight_cash_drawer,greenlight_pos.group_manager,1,1,1,1
 access_cash_drawer_event_all,greenlight.cash.drawer.event.all,model_greenlight_cash_drawer_event,greenlight_pos.group_budtender,1,1,1,0
+access_settings_budtender,greenlight.settings.budtender,model_greenlight_settings,greenlight_pos.group_budtender,1,0,0,0
+access_settings_admin,greenlight.settings.admin,model_greenlight_settings,greenlight_pos.group_admin,1,1,1,1

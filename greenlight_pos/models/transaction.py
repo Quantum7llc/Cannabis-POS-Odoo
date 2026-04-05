@@ -108,8 +108,7 @@ class GreenLightTransactionLine(models.Model):
 
     @api.depends("quantity", "unit_price", "product_id.cost")
     def _compute_amounts(self):
-        # TODO: Tax rate should come from dispensary settings
-        tax_rate = 0.07  # Mississippi 7% sales tax
+        tax_rate = self.env["greenlight.settings"].get_tax_rate()
         for rec in self:
             rec.subtotal = rec.quantity * rec.unit_price
             rec.tax = rec.subtotal * tax_rate

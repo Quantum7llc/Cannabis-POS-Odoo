@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="default_settings" model="greenlight.settings">
+            <field name="name">Default</field>
+            <field name="tax_rate">0.07</field>
+            <field name="dispensary_name">Green Light Dispensary</field>
+            <field name="dispensary_state">MS</field>
+        </record>
+    </data>
+</odoo>

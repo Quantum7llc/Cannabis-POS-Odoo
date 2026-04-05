@@ -38,11 +38,13 @@
         "security/ir.model.access.csv",
         "data/sequences.xml",
         "data/product_categories.xml",
+        "data/default_settings.xml",
         "views/customer_views.xml",
         "views/product_views.xml",
         "views/transaction_views.xml",
         "views/employee_views.xml",
         "views/cash_drawer_views.xml",
+        "views/settings_views.xml",
         "views/menu.xml",
     ],
     "demo": [

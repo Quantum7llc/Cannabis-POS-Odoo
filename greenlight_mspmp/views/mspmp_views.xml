@@ -28,6 +28,23 @@
                         <page string="Batch Content" invisible="not file_content">
                             <field name="file_content"/>
                         </page>
+                        <page string="Pharmacy Info">
+                            <group>
+                                <group>
+                                    <field name="pharmacy_name"/>
+                                    <field name="pharmacy_dea"/>
+                                    <field name="pharmacy_license"/>
+                                    <field name="pharmacy_npi"/>
+                                </group>
+                                <group>
+                                    <field name="pharmacy_address"/>
+                                    <field name="pharmacy_city"/>
+                                    <field name="pharmacy_state"/>
+                                    <field name="pharmacy_zip"/>
+                                    <field name="pharmacy_phone"/>
+                                </group>
+                            </group>
+                        </page>
                         <page string="Errors" invisible="not error_message">
                             <field name="error_message"/>
                         </page>

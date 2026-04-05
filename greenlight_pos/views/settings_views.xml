@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_settings_form" model="ir.ui.view">
+        <field name="name">greenlight.settings.form</field>
+        <field name="model">greenlight.settings</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Dispensary Information">
+                        <group>
+                            <field name="name"/>
+                            <field name="dispensary_name"/>
+                            <field name="dispensary_license"/>
+                            <field name="dispensary_dea"/>
+                            <field name="dispensary_phone"/>
+                        </group>
+                        <group>
+                            <field name="dispensary_address"/>
+                            <field name="dispensary_city"/>
+                            <field name="dispensary_state"/>
+                            <field name="dispensary_zip"/>
+                            <field name="is_active"/>
+                        </group>
+                    </group>
+                    <group string="Tax Configuration">
+                        <field name="tax_rate" widget="percentage"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_settings_tree" model="ir.ui.view">
+        <field name="name">greenlight.settings.tree</field>
+        <field name="model">greenlight.settings</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="dispensary_name"/>
+                <field name="tax_rate" widget="percentage"/>
+                <field name="dispensary_license"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_settings" model="ir.actions.act_window">
+        <field name="name">Dispensary Settings</field>
+        <field name="res_model">greenlight.settings</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

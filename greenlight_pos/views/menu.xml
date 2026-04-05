@@ -19,4 +19,10 @@
     <!-- Staff -->
     <menuitem id="menu_staff" name="Staff" parent="menu_greenlight_root" sequence="40"/>
     <menuitem id="menu_employees" name="Employees" parent="menu_staff" action="action_employee" sequence="10"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_config" name="Configuration" parent="menu_greenlight_root" sequence="90"
+              groups="greenlight_pos.group_admin"/>
+    <menuitem id="menu_settings" name="Dispensary Settings" parent="menu_config"
+              action="action_settings" sequence="10"/>
 </odoo>
