@@ -6,10 +6,20 @@ class TestExchangeRate(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.pair = self.env["greenlight.currency.pair"].create({
-            "base_currency": "USD",
-            "quote_currency": "GBP",
-        })
+        # Use the existing pair from currency_pairs.xml data, not create a duplicate
+        self.pair = self.env["greenlight.currency.pair"].search([
+            ("base_currency", "=", "USD"),
+            ("quote_currency", "=", "GBP"),
+        ], limit=1)
+        if not self.pair:
+            self.pair = self.env["greenlight.currency.pair"].create({
+                "base_currency": "USD",
+                "quote_currency": "GBP",
+            })
+        # Clean any existing rates for this pair to keep tests deterministic
+        self.env["greenlight.exchange.rate"].search([
+            ("pair_id", "=", self.pair.id),
+        ]).unlink()
 
     def test_pair_name_computed(self):
         self.assertEqual(self.pair.name, "USD/GBP")
@@ -78,4 +88,5 @@ class TestExchangeRate(TransactionCase):
         count = self.env["greenlight.exchange.rate"].generate_dummy_rates(days=5)
         self.assertGreater(count, 0)
         rates = self.env["greenlight.exchange.rate"].search([("pair_id", "=", self.pair.id)])
-        self.assertEqual(len(rates), 6)  # 5 days back + today
+        # 6 entries: days 5,4,3,2,1,0 (setUp cleaned existing rates)
+        self.assertEqual(len(rates), 6)

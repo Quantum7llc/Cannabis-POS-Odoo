@@ -53,10 +53,15 @@ class ExchangeRateController(http.Controller):
                 status=404,
             )
 
+        try:
+            limit_int = max(1, min(int(limit), 1000))
+        except (ValueError, TypeError):
+            limit_int = 30
+
         rates = request.env["greenlight.exchange.rate"].sudo().search(
             [("pair_id", "=", pair.id)],
             order="rate_date desc",
-            limit=int(limit),
+            limit=limit_int,
         )
         data = []
         for r in rates:

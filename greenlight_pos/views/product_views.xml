@@ -49,6 +49,26 @@
         </field>
     </record>
 
+    <record id="view_product_search" model="ir.ui.view">
+        <field name="name">greenlight.product.search</field>
+        <field name="model">greenlight.product</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sku"/>
+                <field name="category_id"/>
+                <field name="metrc_tag"/>
+                <filter name="active" string="Active" domain="[('is_active', '=', True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('is_active', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+                    <filter name="group_type" string="Cannabis Type" context="{'group_by': 'cannabis_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_product" model="ir.actions.act_window">
         <field name="name">Products</field>
         <field name="res_model">greenlight.product</field>

@@ -9,8 +9,8 @@ class GreenLightTransaction(models.Model):
     _order = "create_date desc"
 
     name = fields.Char("Reference", readonly=True, default="New")
-    customer_id = fields.Many2one("greenlight.customer", required=True, tracking=True)
-    employee_id = fields.Many2one("greenlight.employee", required=True, tracking=True)
+    customer_id = fields.Many2one("greenlight.customer", required=True, tracking=True, ondelete="restrict")
+    employee_id = fields.Many2one("greenlight.employee", required=True, tracking=True, ondelete="restrict")
     line_ids = fields.One2many("greenlight.transaction.line", "transaction_id")
 
     # Totals (stored in cents for precision, displayed as currency)
@@ -69,7 +69,11 @@ class GreenLightTransaction(models.Model):
             if rec.state != "draft":
                 raise UserError("Only draft transactions can be confirmed.")
             for line in rec.line_ids:
-                line.product_id.inventory_count -= line.quantity
+                self.env.cr.execute(
+                    "UPDATE greenlight_product SET inventory_count = inventory_count - %s WHERE id = %s",
+                    (line.quantity, line.product_id.id),
+                )
+                line.product_id.invalidate_recordset(["inventory_count"])
             rec.state = "confirmed"
 
     def action_void(self):
@@ -77,7 +81,11 @@ class GreenLightTransaction(models.Model):
             if rec.state != "confirmed":
                 raise UserError("Only confirmed transactions can be voided.")
             for line in rec.line_ids:
-                line.product_id.inventory_count += line.quantity
+                self.env.cr.execute(
+                    "UPDATE greenlight_product SET inventory_count = inventory_count + %s WHERE id = %s",
+                    (line.quantity, line.product_id.id),
+                )
+                line.product_id.invalidate_recordset(["inventory_count"])
             rec.state = "voided"
 
 

@@ -34,8 +34,8 @@
         "mail",
     ],
     "data": [
-        "security/ir.model.access.csv",
         "security/security_groups.xml",
+        "security/ir.model.access.csv",
         "data/sequences.xml",
         "data/product_categories.xml",
         "views/customer_views.xml",

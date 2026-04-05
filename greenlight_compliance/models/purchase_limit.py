@@ -14,8 +14,8 @@ class GreenLightPurchaseLimit(models.Model):
     _description = "Rolling 30-Day Purchase Limit Tracking"
     _order = "purchase_date desc"
 
-    customer_id = fields.Many2one("greenlight.customer", required=True, index=True)
-    transaction_id = fields.Many2one("greenlight.transaction", required=True, index=True)
+    customer_id = fields.Many2one("greenlight.customer", required=True, index=True, ondelete="restrict")
+    transaction_id = fields.Many2one("greenlight.transaction", required=True, index=True, ondelete="cascade")
     purchase_date = fields.Datetime(required=True)
     weight_grams = fields.Float("Flower-Equivalent Grams", digits=(10, 3))
     mmceu_units = fields.Float("MMCEU", digits=(10, 3))
@@ -70,8 +70,15 @@ class GreenLightPurchaseLimit(models.Model):
         """Check limits before confirming a transaction, then record the purchase.
 
         Raises UserError if the transaction would exceed limits.
+        Uses an advisory lock to prevent concurrent transactions for the
+        same customer from racing past the limit check.
         """
-        totals = self.get_rolling_totals(transaction.customer_id.id)
+        customer_id = transaction.customer_id.id
+        self.env.cr.execute(
+            "SELECT pg_advisory_xact_lock(hashtext('purchase_limit:' || %s::text))",
+            (customer_id,),
+        )
+        totals = self.get_rolling_totals(customer_id)
 
         # Calculate what this transaction would add
         txn_grams = 0.0
