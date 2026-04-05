@@ -13,9 +13,9 @@
         <field name="model">greenlight.exchange.rate</field>
         <field name="arch" type="xml">
             <graph string="Exchange Rate Trends" type="line" sample="1">
-                <field name="rate_date" type="col"/>
+                <field name="rate_date" type="row"/>
                 <field name="rate" type="measure"/>
-                <field name="pair_name" type="col"/>
+                <field name="pair_name" type="row"/>
             </graph>
         </field>
     </record>
@@ -26,9 +26,9 @@
         <field name="model">greenlight.exchange.rate</field>
         <field name="arch" type="xml">
             <graph string="Daily Rate Changes (%)" type="bar" sample="1">
-                <field name="rate_date" type="col"/>
+                <field name="rate_date" type="row"/>
                 <field name="change_pct" type="measure"/>
-                <field name="pair_name" type="col"/>
+                <field name="pair_name" type="row"/>
             </graph>
         </field>
     </record>
@@ -40,7 +40,7 @@
         <field name="arch" type="xml">
             <pivot string="Exchange Rate Analysis" sample="1">
                 <field name="pair_name" type="row"/>
-                <field name="rate_date" type="col" interval="week"/>
+                <field name="rate_date" type="row" interval="week"/>
                 <field name="rate" type="measure"/>
                 <field name="high_rate" type="measure"/>
                 <field name="low_rate" type="measure"/>

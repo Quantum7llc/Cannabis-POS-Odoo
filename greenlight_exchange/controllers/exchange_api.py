@@ -37,9 +37,10 @@ class ExchangeRateController(http.Controller):
 
     @http.route("/api/exchange/rates/<string:pair_name>", type="http", auth="public", methods=["GET"], csrf=False)
     def get_rates(self, pair_name, limit="30", **kwargs):
-        """GET /api/exchange/rates/USD/GBP?limit=30 — rate history for a pair."""
-        # pair_name comes as "USD" due to slash routing; reconstruct from path
-        # Handle both /USD/GBP and /USD-GBP formats
+        """GET /api/exchange/rates/USD-GBP?limit=30 — rate history for a pair.
+
+        Use dash separator (USD-GBP), not slash. Slashes conflict with URL routing.
+        """
         pair_name = pair_name.upper().replace("-", "/")
 
         pair = request.env["greenlight.currency.pair"].sudo().search(

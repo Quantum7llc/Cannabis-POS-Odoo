@@ -68,13 +68,16 @@ class GreenLightTransaction(models.Model):
         for rec in self:
             if rec.state != "draft":
                 raise UserError("Only draft transactions can be confirmed.")
-            # Purchase limit check is handled by greenlight_compliance module
+            for line in rec.line_ids:
+                line.product_id.inventory_count -= line.quantity
             rec.state = "confirmed"
 
     def action_void(self):
         for rec in self:
             if rec.state != "confirmed":
                 raise UserError("Only confirmed transactions can be voided.")
+            for line in rec.line_ids:
+                line.product_id.inventory_count += line.quantity
             rec.state = "voided"
 
 

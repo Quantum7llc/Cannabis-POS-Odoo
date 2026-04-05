@@ -10,7 +10,7 @@ class GreenLightEmployee(models.Model):
     _order = "name"
 
     name = fields.Char(required=True, tracking=True)
-    pin_hash = fields.Char("PIN Hash", required=True)
+    pin_hash = fields.Char("PIN Hash", required=True, groups="greenlight_pos.group_admin")
     role = fields.Selection(
         [
             ("budtender", "Budtender"),
@@ -25,7 +25,7 @@ class GreenLightEmployee(models.Model):
 
     # MFA
     mfa_enabled = fields.Boolean("MFA Enabled", default=False)
-    totp_secret = fields.Char("TOTP Secret")
+    totp_secret = fields.Char("TOTP Secret", groups="greenlight_pos.group_admin")
 
     # Shift tracking
     current_shift_id = fields.Many2one("greenlight.shift", "Current Shift", readonly=True)
