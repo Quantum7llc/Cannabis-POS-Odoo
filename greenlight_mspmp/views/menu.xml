@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_mspmp" name="PMP Reporting" parent="greenlight_pos.menu_compliance" sequence="20"/>
+    <menuitem id="menu_mspmp" name="PMP Reporting" parent="greenlight_compliance.menu_compliance" sequence="20"/>
     <menuitem id="menu_mspmp_batches" name="Daily Batches" parent="menu_mspmp" action="action_mspmp_batch" sequence="10"/>
 </odoo>

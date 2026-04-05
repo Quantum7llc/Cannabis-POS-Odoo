@@ -8,6 +8,7 @@
     "license": "LGPL-3",
     "depends": [
         "greenlight_pos",
+        "greenlight_compliance",
     ],
     "data": [
         "security/ir.model.access.csv",

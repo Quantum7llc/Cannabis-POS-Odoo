@@ -9,8 +9,10 @@ access_transaction_budtender,greenlight.transaction.budtender,model_greenlight_t
 access_transaction_manager,greenlight.transaction.manager,model_greenlight_transaction,greenlight_pos.group_manager,1,1,1,1
 access_transaction_line_budtender,greenlight.transaction.line.budtender,model_greenlight_transaction_line,greenlight_pos.group_budtender,1,1,1,0
 access_transaction_line_manager,greenlight.transaction.line.manager,model_greenlight_transaction_line,greenlight_pos.group_manager,1,1,1,1
+access_employee_budtender,greenlight.employee.budtender,model_greenlight_employee,greenlight_pos.group_budtender,1,0,0,0
 access_employee_manager,greenlight.employee.manager,model_greenlight_employee,greenlight_pos.group_manager,1,1,1,1
 access_shift_budtender,greenlight.shift.budtender,model_greenlight_shift,greenlight_pos.group_budtender,1,1,1,0
+access_shift_manager,greenlight.shift.manager,model_greenlight_shift,greenlight_pos.group_manager,1,1,1,1
 access_cash_drawer_budtender,greenlight.cash.drawer.budtender,model_greenlight_cash_drawer,greenlight_pos.group_budtender,1,1,1,0
 access_cash_drawer_manager,greenlight.cash.drawer.manager,model_greenlight_cash_drawer,greenlight_pos.group_manager,1,1,1,1
 access_cash_drawer_event_all,greenlight.cash.drawer.event.all,model_greenlight_cash_drawer_event,greenlight_pos.group_budtender,1,1,1,0

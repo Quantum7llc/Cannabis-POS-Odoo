@@ -31,14 +31,12 @@
     "license": "LGPL-3",
     "depends": [
         "base",
-        "point_of_sale",
-        "stock",
-        "product",
-        "account",
+        "mail",
     ],
     "data": [
         "security/ir.model.access.csv",
         "security/security_groups.xml",
+        "data/sequences.xml",
         "data/product_categories.xml",
         "views/customer_views.xml",
         "views/product_views.xml",

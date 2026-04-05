@@ -1,3 +1,4 @@
+from datetime import timedelta
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
@@ -35,10 +36,11 @@ class GreenLightMSPMPBatch(models.Model):
         if self.state not in ("draft", "failed"):
             raise UserError("Can only generate from draft or failed state.")
 
+        next_day = self.report_date + timedelta(days=1)
         transactions = self.env["greenlight.transaction"].search([
             ("state", "=", "confirmed"),
             ("create_date", ">=", f"{self.report_date} 00:00:00"),
-            ("create_date", "<", f"{self.report_date} 23:59:59"),
+            ("create_date", "<", f"{next_day} 00:00:00"),
         ])
 
         if not transactions:

@@ -50,7 +50,7 @@
         <field name="model">greenlight.customer</field>
         <field name="arch" type="xml">
             <list>
-                <field name="display_name"/>
+                <field name="full_name"/>
                 <field name="id_number"/>
                 <field name="medical_card_number"/>
                 <field name="phone"/>

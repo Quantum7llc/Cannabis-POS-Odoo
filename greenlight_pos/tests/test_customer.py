@@ -15,8 +15,8 @@ class TestGreenLightCustomer(TransactionCase):
             "id_expiry": "2028-01-15",
         })
 
-    def test_display_name(self):
-        self.assertEqual(self.customer.display_name, "John Doe")
+    def test_full_name(self):
+        self.assertEqual(self.customer.full_name, "John Doe")
 
     def test_age_computation(self):
         self.assertGreater(self.customer.age, 0)

@@ -8,10 +8,11 @@ class GreenLightCustomer(models.Model):
     _description = "Cannabis Dispensary Patient/Customer"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "last_name, first_name"
+    _rec_name = "full_name"
 
     first_name = fields.Char(required=True, tracking=True)
     last_name = fields.Char(required=True, tracking=True)
-    display_name = fields.Char(compute="_compute_display_name", store=True)
+    full_name = fields.Char(compute="_compute_full_name", store=True)
     dob = fields.Date("Date of Birth", required=True)
     age = fields.Integer(compute="_compute_age")
 
@@ -49,9 +50,9 @@ class GreenLightCustomer(models.Model):
     ]
 
     @api.depends("first_name", "last_name")
-    def _compute_display_name(self):
+    def _compute_full_name(self):
         for rec in self:
-            rec.display_name = f"{rec.first_name} {rec.last_name}" if rec.first_name and rec.last_name else ""
+            rec.full_name = f"{rec.first_name} {rec.last_name}" if rec.first_name and rec.last_name else ""
 
     @api.depends("dob")
     def _compute_age(self):

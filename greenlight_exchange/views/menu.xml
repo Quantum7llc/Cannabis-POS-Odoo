@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Root menu for the exchange module (standalone app) -->
-    <menuitem id="menu_exchange_root" name="Exchange Rates" sequence="200"
-              web_icon="greenlight_exchange,static/description/icon.png"/>
+    <menuitem id="menu_exchange_root" name="Exchange Rates" sequence="200"/>
 
     <!-- Dashboard -->
     <menuitem id="menu_dashboard" name="Dashboard" parent="menu_exchange_root" sequence="10"/>

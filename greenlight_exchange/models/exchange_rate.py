@@ -53,7 +53,7 @@ class ExchangeRate(models.Model):
         ),
     ]
 
-    @api.depends("rate", "pair_id")
+    @api.depends("rate", "rate_date", "pair_id")
     def _compute_change(self):
         for rec in self:
             # Find previous day's rate
