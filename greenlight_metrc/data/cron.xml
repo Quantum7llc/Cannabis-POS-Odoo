@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Server action: Metrc full sync (packages + sales) -->
+        <record id="action_server_metrc_sync_all" model="ir.actions.server">
+            <field name="name">Metrc: Sync Packages &amp; Sales</field>
+            <field name="model_id" ref="model_greenlight_metrc_config"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_sync_all()</field>
+        </record>
+
+        <!-- Cron job: runs every 15 minutes by default -->
+        <record id="cron_metrc_sync_all" model="ir.cron">
+            <field name="cron_name">Metrc: Sync Packages &amp; Sales</field>
+            <field name="ir_actions_server_id" ref="action_server_metrc_sync_all"/>
+            <field name="interval_number">15</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="numbercall">-1</field>
+        </record>
+    </data>
+</odoo>

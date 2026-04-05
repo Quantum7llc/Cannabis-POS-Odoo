@@ -48,8 +48,8 @@ class GreenLightSalesReport(models.Model):
     currency_id = fields.Many2one("res.currency", readonly=True)
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 SELECT
                     row_number() OVER () AS id,
@@ -126,8 +126,8 @@ class GreenLightProductPerformance(models.Model):
     currency_id = fields.Many2one("res.currency", readonly=True)
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 SELECT
                     row_number() OVER () AS id,
@@ -183,8 +183,8 @@ class GreenLightEmployeePerformance(models.Model):
     currency_id = fields.Many2one("res.currency", readonly=True)
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 SELECT
                     row_number() OVER () AS id,
@@ -233,8 +233,8 @@ class GreenLightCustomerAnalytics(models.Model):
     currency_id = fields.Many2one("res.currency", readonly=True)
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 SELECT
                     row_number() OVER () AS id,
@@ -293,8 +293,8 @@ class GreenLightCogsReport(models.Model):
     currency_id = fields.Many2one("res.currency", readonly=True)
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 SELECT
                     row_number() OVER () AS id,
@@ -352,8 +352,8 @@ class GreenLightInventoryAlert(models.Model):
     )
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 WITH product_sales AS (
                     SELECT

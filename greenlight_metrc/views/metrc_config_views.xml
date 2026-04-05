@@ -7,6 +7,9 @@
             <form>
                 <header>
                     <button name="action_test_connection" type="object" string="Test Connection" class="oe_highlight"/>
+                    <button name="action_sync_packages" type="object" string="Sync Packages"/>
+                    <button name="action_sync_sales" type="object" string="Sync Sales"/>
+                    <button name="action_sync_all" type="object" string="Sync All"/>
                 </header>
                 <sheet>
                     <group>

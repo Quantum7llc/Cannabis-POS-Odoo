@@ -46,10 +46,6 @@ class GreenLightProduct(models.Model):
     # Status
     is_active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        ("sku_uniq", "unique(sku)", "SKU must be unique."),
-    ]
-
     @api.depends("category_id", "category_id.name")
     def _compute_cannabis_type(self):
         for rec in self:

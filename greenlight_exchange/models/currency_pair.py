@@ -15,14 +15,6 @@ class CurrencyPair(models.Model):
     latest_rate = fields.Float(compute="_compute_latest_rate", digits=(12, 6))
     latest_date = fields.Date(compute="_compute_latest_rate")
 
-    _sql_constraints = [
-        (
-            "pair_uniq",
-            "unique(base_currency, quote_currency)",
-            "This currency pair already exists.",
-        ),
-    ]
-
     @api.depends("base_currency", "quote_currency")
     def _compute_name(self):
         for rec in self:

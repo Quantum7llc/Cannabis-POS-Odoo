@@ -45,10 +45,6 @@ class GreenLightCustomer(models.Model):
     is_active = fields.Boolean(default=True)
     notes = fields.Text()
 
-    _sql_constraints = [
-        ("id_number_uniq", "unique(id_number)", "A customer with this ID number already exists."),
-    ]
-
     @api.depends("first_name", "last_name")
     def _compute_full_name(self):
         for rec in self:

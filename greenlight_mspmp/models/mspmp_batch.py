@@ -35,6 +35,7 @@ class GreenLightMSPMPBatch(models.Model):
             ("uploaded", "Uploaded"),
             ("failed", "Failed"),
         ],
+        string="Status",
         default="draft",
     )
     transaction_count = fields.Integer(readonly=True)

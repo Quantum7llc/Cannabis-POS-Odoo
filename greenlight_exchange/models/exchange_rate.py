@@ -28,7 +28,7 @@ class ExchangeRate(models.Model):
         ondelete="cascade",
         index=True,
     )
-    pair_name = fields.Char(related="pair_id.name", store=True, string="Pair")
+    pair_name = fields.Char(related="pair_id.name", store=True, string="Pair Name")
     rate_date = fields.Date(required=True, default=fields.Date.today, index=True)
     rate = fields.Float("Exchange Rate", required=True, digits=(12, 6))
     open_rate = fields.Float("Open", digits=(12, 6))
@@ -44,14 +44,6 @@ class ExchangeRate(models.Model):
         ],
         default="manual",
     )
-
-    _sql_constraints = [
-        (
-            "pair_date_uniq",
-            "unique(pair_id, rate_date)",
-            "Only one rate per pair per date.",
-        ),
-    ]
 
     @api.depends("rate", "rate_date", "pair_id")
     def _compute_change(self):

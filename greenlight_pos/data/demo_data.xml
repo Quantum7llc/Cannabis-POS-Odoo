@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Demo employee (PIN: 1234) -->
+        <!-- ================================================================
+             EMPLOYEES (4)
+             ================================================================ -->
+
+        <!-- Admin employee (PIN: 1234) -->
         <record id="demo_admin" model="greenlight.employee">
-            <field name="name">Admin</field>
-            <!-- SHA-256 of "1234" -->
+            <field name="name">Marcus Johnson</field>
             <field name="pin_hash">03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4</field>
             <field name="role">admin</field>
+            <field name="security_role_id" ref="role_admin"/>
         </record>
 
-        <!-- Demo products -->
+        <!-- Budtender 1 (PIN: 5678) -->
+        <record id="demo_budtender_1" model="greenlight.employee">
+            <field name="name">Ashley Williams</field>
+            <field name="pin_hash">ee79976c9380d5e337fc1c095ece8c8f22f91f306ceeb161fa51fecede2c4ba1</field>
+            <field name="role">budtender</field>
+            <field name="security_role_id" ref="role_budtender"/>
+        </record>
+
+        <!-- Budtender 2 (PIN: 9012) -->
+        <record id="demo_budtender_2" model="greenlight.employee">
+            <field name="name">DeShawn Harris</field>
+            <field name="pin_hash">6f3de3a10e82a3a39e01afc62c5a6a2e5a1eb21dbcfe61c3faa0c3b282e3547c</field>
+            <field name="role">budtender</field>
+            <field name="security_role_id" ref="role_budtender"/>
+        </record>
+
+        <!-- Manager (PIN: 3456) -->
+        <record id="demo_manager" model="greenlight.employee">
+            <field name="name">Tamika Robinson</field>
+            <field name="pin_hash">b3d17caa8e460279023d60c5e63c63c1f16dece35c83c1f79cf11111ac1e62e8</field>
+            <field name="role">manager</field>
+            <field name="security_role_id" ref="role_manager"/>
+        </record>
+
+        <!-- ================================================================
+             PRODUCTS (10)
+             ================================================================ -->
+
+        <!-- Flower (3) -->
         <record id="demo_product_og_kush" model="greenlight.product">
             <field name="name">OG Kush - 3.5g</field>
             <field name="sku">FLW-OGK-35</field>
@@ -22,15 +54,310 @@
             <field name="inventory_count">100</field>
         </record>
 
+        <record id="demo_product_blue_dream" model="greenlight.product">
+            <field name="name">Blue Dream - 3.5g</field>
+            <field name="sku">FLW-BLD-35</field>
+            <field name="category_id" ref="categ_flower"/>
+            <field name="thc_percentage">21.0</field>
+            <field name="cbd_percentage">2.1</field>
+            <field name="weight_grams">3.5</field>
+            <field name="price">40.00</field>
+            <field name="cost">18.00</field>
+            <field name="inventory_count">150</field>
+        </record>
+
+        <record id="demo_product_gsc" model="greenlight.product">
+            <field name="name">Girl Scout Cookies - 3.5g</field>
+            <field name="sku">FLW-GSC-35</field>
+            <field name="category_id" ref="categ_flower"/>
+            <field name="thc_percentage">25.0</field>
+            <field name="cbd_percentage">0.1</field>
+            <field name="weight_grams">3.5</field>
+            <field name="price">55.00</field>
+            <field name="cost">28.00</field>
+            <field name="inventory_count">75</field>
+        </record>
+
+        <!-- Concentrates (2) -->
+        <record id="demo_product_live_resin" model="greenlight.product">
+            <field name="name">Live Resin - 1g</field>
+            <field name="sku">CON-LVR-10</field>
+            <field name="category_id" ref="categ_concentrate"/>
+            <field name="thc_percentage">78.5</field>
+            <field name="cbd_percentage">1.2</field>
+            <field name="weight_grams">1.0</field>
+            <field name="price">65.00</field>
+            <field name="cost">32.00</field>
+            <field name="inventory_count">50</field>
+        </record>
+
+        <record id="demo_product_shatter" model="greenlight.product">
+            <field name="name">Shatter - 1g</field>
+            <field name="sku">CON-SHT-10</field>
+            <field name="category_id" ref="categ_shatter"/>
+            <field name="thc_percentage">85.0</field>
+            <field name="cbd_percentage">0.5</field>
+            <field name="weight_grams">1.0</field>
+            <field name="price">50.00</field>
+            <field name="cost">25.00</field>
+            <field name="inventory_count">60</field>
+        </record>
+
+        <!-- Edibles (2) -->
         <record id="demo_product_gummy" model="greenlight.product">
             <field name="name">THC Gummies 10pk</field>
             <field name="sku">EDI-GUM-10</field>
             <field name="category_id" ref="categ_gummy"/>
             <field name="thc_percentage">10.0</field>
+            <field name="cbd_percentage">0.0</field>
             <field name="weight_grams">50.0</field>
             <field name="price">35.00</field>
             <field name="cost">15.00</field>
             <field name="inventory_count">200</field>
         </record>
+
+        <record id="demo_product_chocolate" model="greenlight.product">
+            <field name="name">Chocolate Bar 100mg</field>
+            <field name="sku">EDI-CHO-100</field>
+            <field name="category_id" ref="categ_edible"/>
+            <field name="thc_percentage">12.0</field>
+            <field name="cbd_percentage">1.0</field>
+            <field name="weight_grams">85.0</field>
+            <field name="price">30.00</field>
+            <field name="cost">12.00</field>
+            <field name="inventory_count">120</field>
+        </record>
+
+        <!-- Tincture (1) -->
+        <record id="demo_product_tincture" model="greenlight.product">
+            <field name="name">Full Spectrum Tincture 30ml</field>
+            <field name="sku">TIN-FST-30</field>
+            <field name="category_id" ref="categ_tincture"/>
+            <field name="thc_percentage">15.0</field>
+            <field name="cbd_percentage">15.0</field>
+            <field name="weight_grams">30.0</field>
+            <field name="price">45.00</field>
+            <field name="cost">20.00</field>
+            <field name="inventory_count">80</field>
+        </record>
+
+        <!-- Pre-Roll (1) -->
+        <record id="demo_product_preroll" model="greenlight.product">
+            <field name="name">Pre-Roll OG Kush 1g</field>
+            <field name="sku">PRE-OGK-10</field>
+            <field name="category_id" ref="categ_preroll"/>
+            <field name="thc_percentage">20.0</field>
+            <field name="cbd_percentage">0.2</field>
+            <field name="weight_grams">1.0</field>
+            <field name="price">12.00</field>
+            <field name="cost">5.00</field>
+            <field name="inventory_count">300</field>
+        </record>
+
+        <!-- Accessory (1) -->
+        <record id="demo_product_papers" model="greenlight.product">
+            <field name="name">Rolling Papers - King Size</field>
+            <field name="sku">ACC-RPK-01</field>
+            <field name="category_id" ref="categ_accessory"/>
+            <field name="thc_percentage">0.0</field>
+            <field name="cbd_percentage">0.0</field>
+            <field name="weight_grams">0.0</field>
+            <field name="price">3.50</field>
+            <field name="cost">1.25</field>
+            <field name="inventory_count">500</field>
+        </record>
+
+        <!-- ================================================================
+             CUSTOMERS (5) — Mississippi residents, all over 21
+             ================================================================ -->
+
+        <record id="demo_customer_james" model="greenlight.customer">
+            <field name="first_name">James</field>
+            <field name="last_name">Patterson</field>
+            <field name="dob">1985-03-14</field>
+            <field name="id_number">MS800123456</field>
+            <field name="id_state">MS</field>
+            <field name="id_expiry">2029-03-14</field>
+            <field name="medical_card_number">MSMC-2024-00123</field>
+            <field name="medical_card_expiry">2027-06-30</field>
+            <field name="recommending_physician">Dr. Robert Williams</field>
+            <field name="phone">601-555-0101</field>
+            <field name="email">james.patterson@email.com</field>
+            <field name="street">1420 Oak Street</field>
+            <field name="city">Jackson</field>
+            <field name="state">MS</field>
+            <field name="zip_code">39201</field>
+            <field name="loyalty_points">250</field>
+        </record>
+
+        <record id="demo_customer_sarah" model="greenlight.customer">
+            <field name="first_name">Sarah</field>
+            <field name="last_name">Mitchell</field>
+            <field name="dob">1990-07-22</field>
+            <field name="id_number">MS800234567</field>
+            <field name="id_state">MS</field>
+            <field name="id_expiry">2028-07-22</field>
+            <field name="medical_card_number">MSMC-2024-00456</field>
+            <field name="medical_card_expiry">2027-12-31</field>
+            <field name="recommending_physician">Dr. Lisa Chen</field>
+            <field name="phone">601-555-0202</field>
+            <field name="email">sarah.mitchell@email.com</field>
+            <field name="street">302 Magnolia Drive</field>
+            <field name="city">Hattiesburg</field>
+            <field name="state">MS</field>
+            <field name="zip_code">39401</field>
+            <field name="loyalty_points">100</field>
+        </record>
+
+        <record id="demo_customer_robert" model="greenlight.customer">
+            <field name="first_name">Robert</field>
+            <field name="last_name">Thompson</field>
+            <field name="dob">1978-11-05</field>
+            <field name="id_number">MS800345678</field>
+            <field name="id_state">MS</field>
+            <field name="id_expiry">2029-11-05</field>
+            <field name="medical_card_number">MSMC-2024-00789</field>
+            <field name="medical_card_expiry">2027-09-15</field>
+            <field name="recommending_physician">Dr. Marcus Brown</field>
+            <field name="phone">662-555-0303</field>
+            <field name="email">robert.thompson@email.com</field>
+            <field name="street">805 Pecan Lane</field>
+            <field name="city">Oxford</field>
+            <field name="state">MS</field>
+            <field name="zip_code">38655</field>
+            <field name="loyalty_points">500</field>
+        </record>
+
+        <record id="demo_customer_maria" model="greenlight.customer">
+            <field name="first_name">Maria</field>
+            <field name="last_name">Garcia</field>
+            <field name="dob">1995-01-30</field>
+            <field name="id_number">MS800456789</field>
+            <field name="id_state">MS</field>
+            <field name="id_expiry">2030-01-30</field>
+            <field name="medical_card_number">MSMC-2025-00012</field>
+            <field name="medical_card_expiry">2028-01-30</field>
+            <field name="recommending_physician">Dr. Sarah Adams</field>
+            <field name="phone">228-555-0404</field>
+            <field name="email">maria.garcia@email.com</field>
+            <field name="street">1100 Beach Blvd</field>
+            <field name="city">Biloxi</field>
+            <field name="state">MS</field>
+            <field name="zip_code">39530</field>
+            <field name="loyalty_points">75</field>
+        </record>
+
+        <record id="demo_customer_william" model="greenlight.customer">
+            <field name="first_name">William</field>
+            <field name="last_name">Davis</field>
+            <field name="dob">1982-09-18</field>
+            <field name="id_number">MS800567890</field>
+            <field name="id_state">MS</field>
+            <field name="id_expiry">2029-09-18</field>
+            <field name="medical_card_number">MSMC-2024-00345</field>
+            <field name="medical_card_expiry">2027-03-31</field>
+            <field name="recommending_physician">Dr. Robert Williams</field>
+            <field name="phone">769-555-0505</field>
+            <field name="email">william.davis@email.com</field>
+            <field name="street">445 Cypress Avenue</field>
+            <field name="city">Tupelo</field>
+            <field name="state">MS</field>
+            <field name="zip_code">38801</field>
+            <field name="loyalty_points">325</field>
+        </record>
+
+        <!-- ================================================================
+             REASON CODES (3)
+             ================================================================ -->
+
+        <record id="demo_reason_damaged" model="greenlight.reason.code">
+            <field name="name">Damaged</field>
+            <field name="code_type">adjustment</field>
+        </record>
+
+        <record id="demo_reason_miscounted" model="greenlight.reason.code">
+            <field name="name">Miscounted</field>
+            <field name="code_type">adjustment</field>
+        </record>
+
+        <record id="demo_reason_waste" model="greenlight.reason.code">
+            <field name="name">Waste</field>
+            <field name="code_type">waste</field>
+        </record>
+
+        <!-- ================================================================
+             LOCATIONS (2)
+             ================================================================ -->
+
+        <record id="demo_location_main" model="greenlight.location">
+            <field name="name">Main Dispensary</field>
+            <field name="address">1200 Medical Cannabis Way</field>
+            <field name="city">Jackson</field>
+            <field name="state">MS</field>
+            <field name="zip">39201</field>
+            <field name="phone">601-555-1200</field>
+        </record>
+
+        <record id="demo_location_warehouse" model="greenlight.location">
+            <field name="name">Storage Warehouse</field>
+            <field name="address">450 Industrial Park Drive</field>
+            <field name="city">Jackson</field>
+            <field name="state">MS</field>
+            <field name="zip">39209</field>
+            <field name="phone">601-555-4500</field>
+        </record>
+
+        <!-- ================================================================
+             ROOMS (3)
+             ================================================================ -->
+
+        <record id="demo_room_sales_floor" model="greenlight.room">
+            <field name="name">Sales Floor</field>
+            <field name="room_type">dispensary</field>
+            <field name="location_id" ref="demo_location_main"/>
+        </record>
+
+        <record id="demo_room_vault" model="greenlight.room">
+            <field name="name">Vault</field>
+            <field name="room_type">safe</field>
+            <field name="location_id" ref="demo_location_main"/>
+        </record>
+
+        <record id="demo_room_back_storage" model="greenlight.room">
+            <field name="name">Back Storage</field>
+            <field name="room_type">storage</field>
+            <field name="location_id" ref="demo_location_warehouse"/>
+        </record>
+
+        <!-- ================================================================
+             PROMOTIONS (2)
+             ================================================================ -->
+
+        <!-- 10% off concentrates — active for next 90 days -->
+        <record id="demo_promo_concentrates_10pct" model="greenlight.promotion">
+            <field name="name">10% Off All Concentrates</field>
+            <field name="description">Get 10% off any concentrate product including live resin, shatter, and wax.</field>
+            <field name="discount_type">percentage</field>
+            <field name="discount_value">10.0</field>
+            <field name="category_id" ref="categ_concentrate"/>
+            <field name="start_date" eval="(DateTime.today()).strftime('%Y-%m-%d 00:00:00')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(days=90)).strftime('%Y-%m-%d 23:59:59')"/>
+            <field name="max_uses">0</field>
+            <field name="display_on_pos">True</field>
+        </record>
+
+        <!-- BOGO pre-rolls — limited to 50 uses -->
+        <record id="demo_promo_bogo_prerolls" model="greenlight.promotion">
+            <field name="name">BOGO Pre-Rolls</field>
+            <field name="description">Buy one pre-roll, get one free. Limited to 50 redemptions.</field>
+            <field name="discount_type">fixed</field>
+            <field name="discount_value">12.00</field>
+            <field name="category_id" ref="categ_preroll"/>
+            <field name="start_date" eval="(DateTime.today()).strftime('%Y-%m-%d 00:00:00')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(days=30)).strftime('%Y-%m-%d 23:59:59')"/>
+            <field name="max_uses">50</field>
+            <field name="display_on_pos">True</field>
+        </record>
+
     </data>
 </odoo>

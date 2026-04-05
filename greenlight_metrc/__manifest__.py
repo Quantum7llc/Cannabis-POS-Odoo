@@ -11,6 +11,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/cron.xml",
         "views/metrc_config_views.xml",
         "views/metrc_sync_views.xml",
         "views/menu.xml",
