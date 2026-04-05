@@ -89,21 +89,16 @@
         <field name="model">greenlight.exchange.rate</field>
         <field name="arch" type="xml">
             <search>
-                <field name="pair_name"/>
-                <field name="rate_date"/>
+                <filter name="today" string="Today" domain="[('rate_date', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="this_week" string="This Week" domain="[('rate_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="this_month" string="This Month" domain="[('rate_date', '&gt;=', (context_today() - relativedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>
                 <separator/>
-                <filter name="today" string="Today" domain="[('rate_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
-                <filter name="this_week" string="This Week" domain="[('rate_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
-                <filter name="this_month" string="This Month" domain="[('rate_date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
-                <separator/>
-                <filter name="positive" string="Positive Change" domain="[('change_pct', '>', 0)]"/>
+                <filter name="positive" string="Positive Change" domain="[('change_pct', '&gt;', 0)]"/>
                 <filter name="negative" string="Negative Change" domain="[('change_pct', '&lt;', 0)]"/>
                 <separator/>
-                <group expand="0" string="Group By">
-                    <filter name="group_pair" string="Currency Pair" context="{'group_by': 'pair_id'}"/>
-                    <filter name="group_date" string="Date" context="{'group_by': 'rate_date:month'}"/>
-                    <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
-                </group>
+                <filter name="group_pair" string="Currency Pair" context="{'group_by': 'pair_id'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'rate_date:month'}"/>
+                <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
             </search>
         </field>
     </record>

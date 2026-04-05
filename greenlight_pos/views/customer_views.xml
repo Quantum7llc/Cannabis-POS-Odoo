@@ -66,11 +66,6 @@
         <field name="model">greenlight.customer</field>
         <field name="arch" type="xml">
             <search>
-                <field name="first_name"/>
-                <field name="last_name"/>
-                <field name="id_number"/>
-                <field name="medical_card_number"/>
-                <field name="phone"/>
                 <filter name="active" string="Active" domain="[('is_active', '=', True)]"/>
                 <filter name="expired_id" string="Expired ID" domain="[('id_expired', '=', True)]"/>
             </search>

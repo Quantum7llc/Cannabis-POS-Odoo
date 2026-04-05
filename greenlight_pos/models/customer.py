@@ -20,7 +20,7 @@ class GreenLightCustomer(models.Model):
     id_number = fields.Char("ID Number", required=True, index=True)
     id_state = fields.Char("ID State", required=True, size=2)
     id_expiry = fields.Date("ID Expiration", required=True)
-    id_expired = fields.Boolean(compute="_compute_id_expired")
+    id_expired = fields.Boolean(compute="_compute_id_expired", store=True)
 
     # Medical card
     medical_card_number = fields.Char("Medical Card #")
