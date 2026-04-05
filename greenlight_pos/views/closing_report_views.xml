@@ -85,14 +85,10 @@
         <field name="arch" type="xml">
             <search>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
-                <group string="Group By">
-                    <filter string="Date" name="group_date"
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/><filter string="Date" name="group_date"
                             context="{'group_by': 'report_date'}"/>
                     <filter string="Employee" name="group_employee"
-                            context="{'group_by': 'employee_id'}"/>
-                </group>
-            </search>
+                            context="{'group_by': 'employee_id'}"/></search>
         </field>
     </record>
 

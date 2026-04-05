@@ -137,14 +137,10 @@
         <field name="arch" type="xml">
             <search>
                 <filter string="Successful" name="success" domain="[('success', '=', True)]"/>
-                <filter string="Failed" name="failed" domain="[('success', '=', False)]"/>
-                <group string="Group By">
-                    <filter string="Webhook" name="group_webhook"
+                <filter string="Failed" name="failed" domain="[('success', '=', False)]"/><filter string="Webhook" name="group_webhook"
                             context="{'group_by': 'webhook_id'}"/>
                     <filter string="Event Type" name="group_event"
-                            context="{'group_by': 'event_type'}"/>
-                </group>
-            </search>
+                            context="{'group_by': 'event_type'}"/></search>
         </field>
     </record>
 

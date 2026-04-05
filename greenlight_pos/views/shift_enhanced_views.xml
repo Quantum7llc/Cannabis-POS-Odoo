@@ -91,14 +91,10 @@
                 <filter string="Open" name="open" domain="[('state', '=', 'open')]"/>
                 <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
                 <filter string="Has Variance" name="has_variance"
-                        domain="[('cash_variance', '!=', 0)]"/>
-                <group string="Group By">
-                    <filter string="Employee" name="group_employee"
+                        domain="[('cash_variance', '!=', 0)]"/><filter string="Employee" name="group_employee"
                             context="{'group_by': 'employee_id'}"/>
                     <filter string="State" name="group_state"
-                            context="{'group_by': 'state'}"/>
-                </group>
-            </search>
+                            context="{'group_by': 'state'}"/></search>
         </field>
     </record>
 

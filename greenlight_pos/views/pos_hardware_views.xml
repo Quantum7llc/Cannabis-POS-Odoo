@@ -143,14 +143,10 @@
         <field name="arch" type="xml">
             <search>
                 <filter string="Active" name="active" domain="[('is_active', '=', True)]"/>
-                <filter string="Online" name="online" domain="[('status', '=', 'online')]"/>
-                <group string="Group By">
-                    <filter string="Station" name="group_station"
+                <filter string="Online" name="online" domain="[('status', '=', 'online')]"/><filter string="Station" name="group_station"
                             context="{'group_by': 'station_id'}"/>
                     <filter string="Type" name="group_type"
-                            context="{'group_by': 'device_type'}"/>
-                </group>
-            </search>
+                            context="{'group_by': 'device_type'}"/></search>
         </field>
     </record>
 
