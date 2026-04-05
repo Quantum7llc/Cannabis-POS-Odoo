@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo employee (PIN: 1234) -->
+        <record id="demo_admin" model="greenlight.employee">
+            <field name="name">Admin</field>
+            <!-- SHA-256 of "1234" -->
+            <field name="pin_hash">03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4</field>
+            <field name="role">admin</field>
+        </record>
+
+        <!-- Demo products -->
+        <record id="demo_product_og_kush" model="greenlight.product">
+            <field name="name">OG Kush - 3.5g</field>
+            <field name="sku">FLW-OGK-35</field>
+            <field name="category_id" ref="categ_flower"/>
+            <field name="thc_percentage">22.5</field>
+            <field name="cbd_percentage">0.3</field>
+            <field name="weight_grams">3.5</field>
+            <field name="price">45.00</field>
+            <field name="cost">22.00</field>
+            <field name="inventory_count">100</field>
+        </record>
+
+        <record id="demo_product_gummy" model="greenlight.product">
+            <field name="name">THC Gummies 10pk</field>
+            <field name="sku">EDI-GUM-10</field>
+            <field name="category_id" ref="categ_gummy"/>
+            <field name="thc_percentage">10.0</field>
+            <field name="weight_grams">50.0</field>
+            <field name="price">35.00</field>
+            <field name="cost">15.00</field>
+            <field name="inventory_count">200</field>
+        </record>
+    </data>
+</odoo>

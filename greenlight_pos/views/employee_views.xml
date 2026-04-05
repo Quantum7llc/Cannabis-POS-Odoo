@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">greenlight.employee.form</field>
+        <field name="model">greenlight.employee</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="role"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group>
+                            <field name="mfa_enabled"/>
+                            <field name="current_shift_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_employee_tree" model="ir.ui.view">
+        <field name="name">greenlight.employee.tree</field>
+        <field name="model">greenlight.employee</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="role"/>
+                <field name="is_active"/>
+                <field name="mfa_enabled"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_employee" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">greenlight.employee</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

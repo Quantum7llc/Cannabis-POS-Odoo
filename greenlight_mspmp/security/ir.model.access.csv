@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mspmp_batch_manager,greenlight.mspmp.batch.manager,model_greenlight_mspmp_batch,greenlight_pos.group_manager,1,1,1,0
+access_mspmp_batch_admin,greenlight.mspmp.batch.admin,model_greenlight_mspmp_batch,greenlight_pos.group_admin,1,1,1,1

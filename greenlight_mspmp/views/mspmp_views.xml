@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mspmp_batch_form" model="ir.ui.view">
+        <field name="name">greenlight.mspmp.batch.form</field>
+        <field name="model">greenlight.mspmp.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate" type="object" string="Generate Batch" invisible="state not in ('draft', 'failed')" class="oe_highlight"/>
+                    <button name="action_upload" type="object" string="Upload via SFTP" invisible="state != 'generated'" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="report_date"/>
+                            <field name="transaction_count"/>
+                            <field name="file_name"/>
+                        </group>
+                        <group string="SFTP Settings" invisible="state == 'uploaded'">
+                            <field name="sftp_host"/>
+                            <field name="sftp_port"/>
+                            <field name="sftp_user"/>
+                            <field name="sftp_password" password="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Batch Content" invisible="not file_content">
+                            <field name="file_content"/>
+                        </page>
+                        <page string="Errors" invisible="not error_message">
+                            <field name="error_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mspmp_batch_tree" model="ir.ui.view">
+        <field name="name">greenlight.mspmp.batch.tree</field>
+        <field name="model">greenlight.mspmp.batch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_date"/>
+                <field name="transaction_count"/>
+                <field name="state"/>
+                <field name="file_name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mspmp_batch" model="ir.actions.act_window">
+        <field name="name">PMP Batches</field>
+        <field name="res_model">greenlight.mspmp.batch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

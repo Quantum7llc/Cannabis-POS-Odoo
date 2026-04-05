@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_metrc_config_admin,greenlight.metrc.config.admin,model_greenlight_metrc_config,greenlight_pos.group_admin,1,1,1,1
+access_metrc_sync_log_manager,greenlight.metrc.sync.log.manager,model_greenlight_metrc_sync_log,greenlight_pos.group_manager,1,0,0,0
+access_metrc_sync_log_admin,greenlight.metrc.sync.log.admin,model_greenlight_metrc_sync_log,greenlight_pos.group_admin,1,1,1,1
+access_metrc_package_budtender,greenlight.metrc.package.budtender,model_greenlight_metrc_package,greenlight_pos.group_budtender,1,0,0,0
+access_metrc_package_admin,greenlight.metrc.package.admin,model_greenlight_metrc_package,greenlight_pos.group_admin,1,1,1,1

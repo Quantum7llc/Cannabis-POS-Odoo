@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_customer_form" model="ir.ui.view">
+        <field name="name">greenlight.customer.form</field>
+        <field name="model">greenlight.customer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="is_active" widget="boolean_toggle"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Personal Information">
+                            <field name="first_name"/>
+                            <field name="last_name"/>
+                            <field name="dob"/>
+                            <field name="age"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                        <group string="Identification">
+                            <field name="id_number"/>
+                            <field name="id_state"/>
+                            <field name="id_expiry"/>
+                            <field name="id_expired" invisible="not id_expired"/>
+                            <field name="medical_card_number"/>
+                            <field name="medical_card_expiry"/>
+                            <field name="recommending_physician"/>
+                        </group>
+                    </group>
+                    <group string="Address">
+                        <field name="street"/>
+                        <field name="city"/>
+                        <field name="state"/>
+                        <field name="zip_code"/>
+                    </group>
+                    <group>
+                        <field name="loyalty_points"/>
+                        <field name="transaction_count"/>
+                    </group>
+                    <field name="notes" placeholder="Internal notes..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_customer_tree" model="ir.ui.view">
+        <field name="name">greenlight.customer.tree</field>
+        <field name="model">greenlight.customer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="display_name"/>
+                <field name="id_number"/>
+                <field name="medical_card_number"/>
+                <field name="phone"/>
+                <field name="loyalty_points"/>
+                <field name="transaction_count"/>
+                <field name="id_expired" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_customer_search" model="ir.ui.view">
+        <field name="name">greenlight.customer.search</field>
+        <field name="model">greenlight.customer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="id_number"/>
+                <field name="medical_card_number"/>
+                <field name="phone"/>
+                <filter name="active" string="Active" domain="[('is_active', '=', True)]"/>
+                <filter name="expired_id" string="Expired ID" domain="[('id_expired', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_customer" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">greenlight.customer</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

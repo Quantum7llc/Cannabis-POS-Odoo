@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_metrc" name="Metrc" parent="greenlight_pos.menu_greenlight_root" sequence="60"/>
+    <menuitem id="menu_metrc_config" name="Configuration" parent="menu_metrc" action="action_metrc_config" sequence="10"/>
+    <menuitem id="menu_metrc_packages" name="Packages" parent="menu_metrc" action="action_metrc_packages" sequence="20"/>
+    <menuitem id="menu_metrc_sync_log" name="Sync Log" parent="menu_metrc" action="action_metrc_sync_log" sequence="30"/>
+</odoo>

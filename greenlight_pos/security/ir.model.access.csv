@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_customer_budtender,greenlight.customer.budtender,model_greenlight_customer,greenlight_pos.group_budtender,1,1,1,0
+access_customer_manager,greenlight.customer.manager,model_greenlight_customer,greenlight_pos.group_manager,1,1,1,1
+access_product_budtender,greenlight.product.budtender,model_greenlight_product,greenlight_pos.group_budtender,1,0,0,0
+access_product_manager,greenlight.product.manager,model_greenlight_product,greenlight_pos.group_manager,1,1,1,1
+access_product_category_all,greenlight.product.category.all,model_greenlight_product_category,greenlight_pos.group_budtender,1,0,0,0
+access_product_category_manager,greenlight.product.category.mgr,model_greenlight_product_category,greenlight_pos.group_manager,1,1,1,1
+access_transaction_budtender,greenlight.transaction.budtender,model_greenlight_transaction,greenlight_pos.group_budtender,1,1,1,0
+access_transaction_manager,greenlight.transaction.manager,model_greenlight_transaction,greenlight_pos.group_manager,1,1,1,1
+access_transaction_line_budtender,greenlight.transaction.line.budtender,model_greenlight_transaction_line,greenlight_pos.group_budtender,1,1,1,0
+access_transaction_line_manager,greenlight.transaction.line.manager,model_greenlight_transaction_line,greenlight_pos.group_manager,1,1,1,1
+access_employee_manager,greenlight.employee.manager,model_greenlight_employee,greenlight_pos.group_manager,1,1,1,1
+access_shift_budtender,greenlight.shift.budtender,model_greenlight_shift,greenlight_pos.group_budtender,1,1,1,0
+access_cash_drawer_budtender,greenlight.cash.drawer.budtender,model_greenlight_cash_drawer,greenlight_pos.group_budtender,1,1,1,0
+access_cash_drawer_manager,greenlight.cash.drawer.manager,model_greenlight_cash_drawer,greenlight_pos.group_manager,1,1,1,1
+access_cash_drawer_event_all,greenlight.cash.drawer.event.all,model_greenlight_cash_drawer_event,greenlight_pos.group_budtender,1,1,1,0

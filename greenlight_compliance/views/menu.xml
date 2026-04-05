@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_compliance" name="Compliance" parent="greenlight_pos.menu_greenlight_root" sequence="50"/>
+    <menuitem id="menu_purchase_limits" name="Purchase Limits (MMCEU)" parent="menu_compliance"
+              action="action_purchase_limits" sequence="10"/>
+</odoo>

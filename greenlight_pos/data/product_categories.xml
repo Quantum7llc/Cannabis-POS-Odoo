@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="categ_flower" model="greenlight.product.category">
+            <field name="name">Flower</field>
+        </record>
+        <record id="categ_preroll" model="greenlight.product.category">
+            <field name="name">Pre-Roll</field>
+            <field name="parent_id" ref="categ_flower"/>
+        </record>
+        <record id="categ_concentrate" model="greenlight.product.category">
+            <field name="name">Concentrate</field>
+        </record>
+        <record id="categ_wax" model="greenlight.product.category">
+            <field name="name">Wax</field>
+            <field name="parent_id" ref="categ_concentrate"/>
+        </record>
+        <record id="categ_shatter" model="greenlight.product.category">
+            <field name="name">Shatter</field>
+            <field name="parent_id" ref="categ_concentrate"/>
+        </record>
+        <record id="categ_edible" model="greenlight.product.category">
+            <field name="name">Edible</field>
+        </record>
+        <record id="categ_gummy" model="greenlight.product.category">
+            <field name="name">Gummy</field>
+            <field name="parent_id" ref="categ_edible"/>
+        </record>
+        <record id="categ_tincture" model="greenlight.product.category">
+            <field name="name">Tincture</field>
+        </record>
+        <record id="categ_capsule" model="greenlight.product.category">
+            <field name="name">Capsule</field>
+        </record>
+        <record id="categ_beverage" model="greenlight.product.category">
+            <field name="name">Beverage</field>
+        </record>
+        <record id="categ_accessory" model="greenlight.product.category">
+            <field name="name">Accessory</field>
+        </record>
+    </data>
+</odoo>

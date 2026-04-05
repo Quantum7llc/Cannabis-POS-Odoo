@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_metrc_sync_log_tree" model="ir.ui.view">
+        <field name="name">greenlight.metrc.sync.log.tree</field>
+        <field name="model">greenlight.metrc.sync.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date"/>
+                <field name="direction"/>
+                <field name="method"/>
+                <field name="endpoint"/>
+                <field name="response_status"/>
+                <field name="success" widget="boolean"/>
+                <field name="duration_ms"/>
+                <field name="package_tag"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_metrc_package_tree" model="ir.ui.view">
+        <field name="name">greenlight.metrc.package.tree</field>
+        <field name="model">greenlight.metrc.package</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="metrc_tag"/>
+                <field name="item_name"/>
+                <field name="product_id"/>
+                <field name="category"/>
+                <field name="quantity"/>
+                <field name="thc_pct"/>
+                <field name="cbd_pct"/>
+                <field name="lab_testing_state"/>
+                <field name="last_synced_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_metrc_sync_log" model="ir.actions.act_window">
+        <field name="name">Metrc Sync Log</field>
+        <field name="res_model">greenlight.metrc.sync.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_metrc_packages" model="ir.actions.act_window">
+        <field name="name">Metrc Packages</field>
+        <field name="res_model">greenlight.metrc.package</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

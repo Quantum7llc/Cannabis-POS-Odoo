@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root menu -->
+    <menuitem id="menu_greenlight_root" name="Green Light POS" sequence="100"/>
+
+    <!-- Sales -->
+    <menuitem id="menu_sales" name="Sales" parent="menu_greenlight_root" sequence="10"/>
+    <menuitem id="menu_transactions" name="Transactions" parent="menu_sales" action="action_transaction" sequence="10"/>
+    <menuitem id="menu_cash_drawers" name="Cash Drawers" parent="menu_sales" action="action_cash_drawer" sequence="20"/>
+
+    <!-- Catalog -->
+    <menuitem id="menu_catalog" name="Catalog" parent="menu_greenlight_root" sequence="20"/>
+    <menuitem id="menu_products" name="Products" parent="menu_catalog" action="action_product" sequence="10"/>
+    <menuitem id="menu_categories" name="Categories" parent="menu_catalog" action="action_product_category" sequence="20"/>
+
+    <!-- Patients -->
+    <menuitem id="menu_patients" name="Patients" parent="menu_greenlight_root" action="action_customer" sequence="30"/>
+
+    <!-- Staff -->
+    <menuitem id="menu_staff" name="Staff" parent="menu_greenlight_root" sequence="40"/>
+    <menuitem id="menu_employees" name="Employees" parent="menu_staff" action="action_employee" sequence="10"/>
+</odoo>

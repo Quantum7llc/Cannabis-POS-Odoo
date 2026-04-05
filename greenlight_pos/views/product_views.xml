@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_form" model="ir.ui.view">
+        <field name="name">greenlight.product.form</field>
+        <field name="model">greenlight.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Product Info">
+                            <field name="name"/>
+                            <field name="sku"/>
+                            <field name="category_id"/>
+                            <field name="cannabis_type"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group string="Cannabinoids &amp; Pricing">
+                            <field name="thc_percentage"/>
+                            <field name="cbd_percentage"/>
+                            <field name="weight_grams"/>
+                            <field name="price"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+                    <group string="Inventory">
+                        <field name="inventory_count"/>
+                        <field name="metrc_tag"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_tree" model="ir.ui.view">
+        <field name="name">greenlight.product.tree</field>
+        <field name="model">greenlight.product</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sku"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="cannabis_type"/>
+                <field name="thc_percentage"/>
+                <field name="price"/>
+                <field name="inventory_count"/>
+                <field name="metrc_tag"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_product" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">greenlight.product</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <record id="action_product_category" model="ir.actions.act_window">
+        <field name="name">Product Categories</field>
+        <field name="res_model">greenlight.product.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
