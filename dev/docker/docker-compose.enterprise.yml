@@ -1,0 +1,22 @@
+# Enterprise overlay — use alongside the base docker-compose.yml
+#
+# 1. Clone the enterprise addons repo (requires Odoo partnership/subscription):
+#    git clone https://github.com/odoo/enterprise.git ./enterprise
+#
+# 2. Run with both compose files:
+#    docker compose -f docker-compose.yml -f docker-compose.enterprise.yml up -d
+#
+# Key differences between Community and Enterprise:
+# - Enterprise adds: Studio, Dashboards, Gantt, Map, Cohort views, Barcode app
+# - Enterprise POS adds: IoT Box, kitchen display, restaurant features
+# - Our modules should work on BOTH — avoid enterprise-only view types in core
+
+services:
+  odoo:
+    volumes:
+      - ./enterprise:/mnt/enterprise-addons
+    command: >
+      -- --addons-path=/mnt/extra-addons,/mnt/enterprise-addons,/usr/lib/python3/dist-packages/odoo/addons
+         --db_host=db --db_port=5432 --db_user=odoo --db_password=odoo
+         --dev=reload,qweb,xml
+         -i greenlight_exchange

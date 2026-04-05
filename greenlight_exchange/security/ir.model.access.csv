@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_currency_pair_user,greenlight.currency.pair.user,model_greenlight_currency_pair,base.group_user,1,0,0,0
+access_currency_pair_admin,greenlight.currency.pair.admin,model_greenlight_currency_pair,base.group_system,1,1,1,1
+access_exchange_rate_user,greenlight.exchange.rate.user,model_greenlight_exchange_rate,base.group_user,1,0,0,0
+access_exchange_rate_admin,greenlight.exchange.rate.admin,model_greenlight_exchange_rate,base.group_system,1,1,1,1
+access_generate_dummy_wizard,greenlight.exchange.generate.dummy.wizard,model_greenlight_exchange_generate_dummy_wizard,base.group_system,1,1,1,0

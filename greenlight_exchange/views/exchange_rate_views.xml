@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Currency Pair Views -->
+    <record id="view_currency_pair_form" model="ir.ui.view">
+        <field name="name">greenlight.currency.pair.form</field>
+        <field name="model">greenlight.currency.pair</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="base_currency"/>
+                            <field name="quote_currency"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group>
+                            <field name="latest_rate"/>
+                            <field name="latest_date"/>
+                            <field name="rate_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rate History">
+                            <field name="rate_ids">
+                                <list editable="bottom">
+                                    <field name="rate_date"/>
+                                    <field name="rate"/>
+                                    <field name="open_rate"/>
+                                    <field name="high_rate"/>
+                                    <field name="low_rate"/>
+                                    <field name="close_rate"/>
+                                    <field name="change_pct"/>
+                                    <field name="source"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_currency_pair_tree" model="ir.ui.view">
+        <field name="name">greenlight.currency.pair.tree</field>
+        <field name="model">greenlight.currency.pair</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="base_currency"/>
+                <field name="quote_currency"/>
+                <field name="latest_rate" string="Rate"/>
+                <field name="latest_date" string="As Of"/>
+                <field name="rate_count" string="# Rates"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_currency_pair" model="ir.actions.act_window">
+        <field name="name">Currency Pairs</field>
+        <field name="res_model">greenlight.currency.pair</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Exchange Rate Views -->
+    <record id="view_exchange_rate_tree" model="ir.ui.view">
+        <field name="name">greenlight.exchange.rate.tree</field>
+        <field name="model">greenlight.exchange.rate</field>
+        <field name="arch" type="xml">
+            <list decoration-success="change_pct > 0" decoration-danger="change_pct &lt; 0">
+                <field name="rate_date"/>
+                <field name="pair_name"/>
+                <field name="rate"/>
+                <field name="open_rate" optional="hide"/>
+                <field name="high_rate"/>
+                <field name="low_rate"/>
+                <field name="close_rate" optional="hide"/>
+                <field name="change_pct" widget="float" string="Chg %"/>
+                <field name="source"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_exchange_rate_search" model="ir.ui.view">
+        <field name="name">greenlight.exchange.rate.search</field>
+        <field name="model">greenlight.exchange.rate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pair_name"/>
+                <field name="rate_date"/>
+                <separator/>
+                <filter name="today" string="Today" domain="[('rate_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="this_week" string="This Week" domain="[('rate_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter name="this_month" string="This Month" domain="[('rate_date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="positive" string="Positive Change" domain="[('change_pct', '>', 0)]"/>
+                <filter name="negative" string="Negative Change" domain="[('change_pct', '&lt;', 0)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_pair" string="Currency Pair" context="{'group_by': 'pair_id'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'rate_date:month'}"/>
+                    <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_exchange_rate" model="ir.actions.act_window">
+        <field name="name">Exchange Rates</field>
+        <field name="res_model">greenlight.exchange.rate</field>
+        <field name="view_mode">list,graph,pivot</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+    </record>
+</odoo>

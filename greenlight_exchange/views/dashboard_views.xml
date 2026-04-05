@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Dashboard Views
+        Works on both Community and Enterprise editions.
+        Community: graph + pivot views
+        Enterprise: also gets cohort, dashboard, map views (if installed)
+    -->
+
+    <!-- Graph View: Line chart of rates over time -->
+    <record id="view_exchange_rate_graph_line" model="ir.ui.view">
+        <field name="name">greenlight.exchange.rate.graph.line</field>
+        <field name="model">greenlight.exchange.rate</field>
+        <field name="arch" type="xml">
+            <graph string="Exchange Rate Trends" type="line" sample="1">
+                <field name="rate_date" type="col"/>
+                <field name="rate" type="measure"/>
+                <field name="pair_name" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Graph View: Bar chart for daily changes -->
+    <record id="view_exchange_rate_graph_bar" model="ir.ui.view">
+        <field name="name">greenlight.exchange.rate.graph.bar</field>
+        <field name="model">greenlight.exchange.rate</field>
+        <field name="arch" type="xml">
+            <graph string="Daily Rate Changes (%)" type="bar" sample="1">
+                <field name="rate_date" type="col"/>
+                <field name="change_pct" type="measure"/>
+                <field name="pair_name" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View: Rate analysis by pair and date -->
+    <record id="view_exchange_rate_pivot" model="ir.ui.view">
+        <field name="name">greenlight.exchange.rate.pivot</field>
+        <field name="model">greenlight.exchange.rate</field>
+        <field name="arch" type="xml">
+            <pivot string="Exchange Rate Analysis" sample="1">
+                <field name="pair_name" type="row"/>
+                <field name="rate_date" type="col" interval="week"/>
+                <field name="rate" type="measure"/>
+                <field name="high_rate" type="measure"/>
+                <field name="low_rate" type="measure"/>
+                <field name="change_pct" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard Action: Line chart view (primary dashboard entry point) -->
+    <record id="action_exchange_dashboard" model="ir.actions.act_window">
+        <field name="name">Rate Dashboard</field>
+        <field name="res_model">greenlight.exchange.rate</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_exchange_rate_graph_line"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No exchange rate data yet
+            </p>
+            <p>
+                Use the <b>Generate Dummy Rates</b> wizard to populate
+                sample data, or install with demo data enabled.
+            </p>
+        </field>
+    </record>
+
+    <!-- Daily Changes Action -->
+    <record id="action_exchange_changes" model="ir.actions.act_window">
+        <field name="name">Daily Changes</field>
+        <field name="res_model">greenlight.exchange.rate</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_id" ref="view_exchange_rate_graph_bar"/>
+        <field name="context">{'search_default_this_week': 1}</field>
+    </record>
+</odoo>

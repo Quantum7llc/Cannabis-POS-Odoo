@@ -1,0 +1,46 @@
+# Odoo 19.0 Community development environment
+# Usage: cd dev/docker && docker compose up -d
+#
+# For Enterprise: replace the image with your enterprise image and
+# mount your enterprise addons. See CONTRIBUTING.md for details.
+
+services:
+  odoo:
+    image: odoo:19.0
+    container_name: greenlight-odoo
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+      - "8072:8072"  # live chat / longpolling
+    volumes:
+      # Mount our custom addons into the container
+      - ../../:/mnt/extra-addons
+      - odoo-data:/var/lib/odoo
+    environment:
+      - HOST=db
+      - PORT=5432
+      - USER=odoo
+      - PASSWORD=odoo
+    command: >
+      -- --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+         --db_host=db --db_port=5432 --db_user=odoo --db_password=odoo
+         --dev=reload,qweb,xml
+         -i greenlight_exchange
+
+  db:
+    image: postgres:16
+    container_name: greenlight-odoo-db
+    environment:
+      - POSTGRES_DB=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  odoo-data:
+  pg-data:

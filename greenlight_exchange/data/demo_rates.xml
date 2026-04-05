@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Seed a few sample rates so the dashboard isn't empty before running the wizard -->
+        <record id="rate_usd_gbp_1" model="greenlight.exchange.rate">
+            <field name="pair_id" ref="pair_usd_gbp"/>
+            <field name="rate_date" eval="(DateTime.today() - timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="rate">0.7920</field>
+            <field name="open_rate">0.7915</field>
+            <field name="high_rate">0.7945</field>
+            <field name="low_rate">0.7888</field>
+            <field name="close_rate">0.7920</field>
+            <field name="source">dummy</field>
+        </record>
+        <record id="rate_usd_gbp_2" model="greenlight.exchange.rate">
+            <field name="pair_id" ref="pair_usd_gbp"/>
+            <field name="rate_date" eval="(DateTime.today() - timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="rate">0.7935</field>
+            <field name="open_rate">0.7920</field>
+            <field name="high_rate">0.7960</field>
+            <field name="low_rate">0.7905</field>
+            <field name="close_rate">0.7935</field>
+            <field name="source">dummy</field>
+        </record>
+        <record id="rate_usd_gbp_3" model="greenlight.exchange.rate">
+            <field name="pair_id" ref="pair_usd_gbp"/>
+            <field name="rate_date" eval="DateTime.today().strftime('%Y-%m-%d')"/>
+            <field name="rate">0.7948</field>
+            <field name="open_rate">0.7935</field>
+            <field name="high_rate">0.7970</field>
+            <field name="low_rate">0.7920</field>
+            <field name="close_rate">0.7948</field>
+            <field name="source">dummy</field>
+        </record>
+        <record id="rate_usd_eur_1" model="greenlight.exchange.rate">
+            <field name="pair_id" ref="pair_usd_eur"/>
+            <field name="rate_date" eval="(DateTime.today() - timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="rate">0.9180</field>
+            <field name="open_rate">0.9170</field>
+            <field name="high_rate">0.9210</field>
+            <field name="low_rate">0.9150</field>
+            <field name="close_rate">0.9180</field>
+            <field name="source">dummy</field>
+        </record>
+        <record id="rate_usd_eur_2" model="greenlight.exchange.rate">
+            <field name="pair_id" ref="pair_usd_eur"/>
+            <field name="rate_date" eval="DateTime.today().strftime('%Y-%m-%d')"/>
+            <field name="rate">0.9205</field>
+            <field name="open_rate">0.9180</field>
+            <field name="high_rate">0.9230</field>
+            <field name="low_rate">0.9165</field>
+            <field name="close_rate">0.9205</field>
+            <field name="source">dummy</field>
+        </record>
+    </data>
+</odoo>

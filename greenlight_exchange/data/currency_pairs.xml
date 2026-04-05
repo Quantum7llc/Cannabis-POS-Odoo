@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="pair_usd_gbp" model="greenlight.currency.pair">
+            <field name="base_currency">USD</field>
+            <field name="quote_currency">GBP</field>
+        </record>
+        <record id="pair_usd_eur" model="greenlight.currency.pair">
+            <field name="base_currency">USD</field>
+            <field name="quote_currency">EUR</field>
+        </record>
+        <record id="pair_gbp_eur" model="greenlight.currency.pair">
+            <field name="base_currency">GBP</field>
+            <field name="quote_currency">EUR</field>
+        </record>
+        <record id="pair_usd_jpy" model="greenlight.currency.pair">
+            <field name="base_currency">USD</field>
+            <field name="quote_currency">JPY</field>
+        </record>
+        <record id="pair_usd_cad" model="greenlight.currency.pair">
+            <field name="base_currency">USD</field>
+            <field name="quote_currency">CAD</field>
+        </record>
+        <record id="pair_gbp_usd" model="greenlight.currency.pair">
+            <field name="base_currency">GBP</field>
+            <field name="quote_currency">USD</field>
+        </record>
+        <record id="pair_eur_usd" model="greenlight.currency.pair">
+            <field name="base_currency">EUR</field>
+            <field name="quote_currency">USD</field>
+        </record>
+        <record id="pair_usd_chf" model="greenlight.currency.pair">
+            <field name="base_currency">USD</field>
+            <field name="quote_currency">CHF</field>
+        </record>
+    </data>
+</odoo>

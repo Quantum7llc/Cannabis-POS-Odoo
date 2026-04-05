@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root menu for the exchange module (standalone app) -->
+    <menuitem id="menu_exchange_root" name="Exchange Rates" sequence="200"
+              web_icon="greenlight_exchange,static/description/icon.png"/>
+
+    <!-- Dashboard -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="menu_exchange_root" sequence="10"/>
+    <menuitem id="menu_dashboard_trends" name="Rate Trends" parent="menu_dashboard"
+              action="action_exchange_dashboard" sequence="10"/>
+    <menuitem id="menu_dashboard_changes" name="Daily Changes" parent="menu_dashboard"
+              action="action_exchange_changes" sequence="20"/>
+
+    <!-- Data -->
+    <menuitem id="menu_data" name="Data" parent="menu_exchange_root" sequence="20"/>
+    <menuitem id="menu_currency_pairs" name="Currency Pairs" parent="menu_data"
+              action="action_currency_pair" sequence="10"/>
+    <menuitem id="menu_exchange_rates" name="All Rates" parent="menu_data"
+              action="action_exchange_rate" sequence="20"/>
+
+    <!-- Tools -->
+    <menuitem id="menu_tools" name="Tools" parent="menu_exchange_root" sequence="30"/>
+    <menuitem id="menu_generate_dummy" name="Generate Dummy Data" parent="menu_tools"
+              action="greenlight_exchange.action_generate_dummy_wizard" sequence="10"/>
+</odoo>
