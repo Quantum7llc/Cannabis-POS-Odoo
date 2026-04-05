@@ -9,6 +9,10 @@
     <menuitem id="menu_receipts" name="Receipts" parent="menu_sales" action="action_receipt" sequence="15"/>
     <menuitem id="menu_refunds" name="Refunds" parent="menu_sales" action="action_refund" sequence="16"/>
     <menuitem id="menu_cash_drawers" name="Cash Drawers" parent="menu_sales" action="action_cash_drawer" sequence="20"/>
+    <menuitem id="menu_shifts" name="Shifts" parent="menu_sales" action="action_shift_enhanced" sequence="25"/>
+    <menuitem id="menu_closing_reports" name="Closing Reports" parent="menu_sales"
+              action="action_closing_report" sequence="30"
+              groups="greenlight_pos.group_manager"/>
 
     <!-- Catalog -->
     <menuitem id="menu_catalog" name="Catalog" parent="menu_greenlight_root" sequence="20"/>
@@ -49,9 +53,64 @@
     <menuitem id="menu_dashboard" name="Dashboard" parent="menu_greenlight_root"
               action="action_dashboard" sequence="5"/>
 
+    <!-- Locations -->
+    <menuitem id="menu_locations" name="Locations" parent="menu_greenlight_root" sequence="60"
+              groups="greenlight_pos.group_manager"/>
+    <menuitem id="menu_locations_list" name="All Locations" parent="menu_locations"
+              action="action_location" sequence="10"/>
+    <menuitem id="menu_rooms" name="Rooms" parent="menu_locations"
+              action="action_room" sequence="20"/>
+    <menuitem id="menu_location_inventory" name="Location Inventory" parent="menu_locations"
+              action="action_location_inventory" sequence="30"/>
+    <menuitem id="menu_stock_transfers" name="Stock Transfers" parent="menu_locations"
+              action="action_stock_transfer" sequence="40"/>
+
+    <!-- Analytics & Reports -->
+    <menuitem id="menu_analytics" name="Analytics" parent="menu_greenlight_root" sequence="70"
+              groups="greenlight_pos.group_manager"/>
+    <menuitem id="menu_sales_report" name="Sales Analytics" parent="menu_analytics"
+              action="action_sales_report" sequence="10"/>
+    <menuitem id="menu_sales_by_category" name="Sales by Category" parent="menu_analytics"
+              action="action_sales_by_category" sequence="15"/>
+    <menuitem id="menu_product_performance" name="Product Performance" parent="menu_analytics"
+              action="action_product_performance" sequence="20"/>
+    <menuitem id="menu_employee_performance" name="Employee Performance" parent="menu_analytics"
+              action="action_employee_performance" sequence="30"/>
+    <menuitem id="menu_customer_analytics" name="Customer Analytics" parent="menu_analytics"
+              action="action_customer_analytics" sequence="40"/>
+    <menuitem id="menu_cogs_report" name="280E COGS Report" parent="menu_analytics"
+              action="action_cogs_report" sequence="50"/>
+    <menuitem id="menu_inventory_alerts" name="Inventory Alerts" parent="menu_analytics"
+              action="action_inventory_alert" sequence="60"/>
+
+    <!-- Audit -->
+    <menuitem id="menu_audit" name="Audit" parent="menu_greenlight_root" sequence="80"
+              groups="greenlight_pos.group_admin"/>
+    <menuitem id="menu_audit_log" name="Audit Log" parent="menu_audit"
+              action="action_audit_log" sequence="10"/>
+    <menuitem id="menu_change_log" name="Change Log" parent="menu_audit"
+              action="action_change_log" sequence="20"/>
+
+    <!-- Security -->
+    <menuitem id="menu_security" name="Security" parent="menu_greenlight_root" sequence="85"
+              groups="greenlight_pos.group_admin"/>
+    <menuitem id="menu_security_roles" name="Roles" parent="menu_security"
+              action="action_security_role" sequence="10"/>
+    <menuitem id="menu_permissions" name="Permissions" parent="menu_security"
+              action="action_permission" sequence="20"/>
+
     <!-- Configuration -->
     <menuitem id="menu_config" name="Configuration" parent="menu_greenlight_root" sequence="90"
               groups="greenlight_pos.group_admin"/>
     <menuitem id="menu_settings" name="Dispensary Settings" parent="menu_config"
               action="action_settings" sequence="10"/>
+    <menuitem id="menu_hardware" name="Hardware" parent="menu_config" sequence="20"/>
+    <menuitem id="menu_pos_stations" name="POS Stations" parent="menu_hardware"
+              action="action_pos_station" sequence="10"/>
+    <menuitem id="menu_pos_devices" name="POS Devices" parent="menu_hardware"
+              action="action_pos_device" sequence="20"/>
+    <menuitem id="menu_webhooks" name="Webhooks" parent="menu_config"
+              action="action_webhook" sequence="30"/>
+    <menuitem id="menu_webhook_deliveries" name="Webhook Deliveries" parent="menu_config"
+              action="action_webhook_delivery" sequence="31"/>
 </odoo>

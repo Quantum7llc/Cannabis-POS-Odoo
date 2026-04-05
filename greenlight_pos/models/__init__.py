@@ -10,3 +10,11 @@ from . import order
 from . import queue
 from . import promotion
 from . import dashboard
+from . import location
+from . import shift_enhanced
+from . import closing_report
+from . import pos_hardware
+from . import webhook
+from . import audit_log
+from . import security_role
+from . import analytics

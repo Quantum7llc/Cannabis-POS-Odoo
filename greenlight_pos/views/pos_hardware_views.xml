@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- POS Station views -->
+    <record id="view_pos_station_form" model="ir.ui.view">
+        <field name="name">greenlight.pos.station.form</field>
+        <field name="model">greenlight.pos.station</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g., Register 1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="location"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group>
+                            <field name="device_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Devices" name="devices">
+                            <field name="device_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="device_type"/>
+                                    <field name="connection_type"/>
+                                    <field name="ip_address"/>
+                                    <field name="port"/>
+                                    <field name="is_active"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pos_station_list" model="ir.ui.view">
+        <field name="name">greenlight.pos.station.list</field>
+        <field name="model">greenlight.pos.station</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="location"/>
+                <field name="device_count"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pos_station_search" model="ir.ui.view">
+        <field name="name">greenlight.pos.station.search</field>
+        <field name="model">greenlight.pos.station</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Active" name="active" domain="[('is_active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pos_station" model="ir.actions.act_window">
+        <field name="name">POS Stations</field>
+        <field name="res_model">greenlight.pos.station</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <!-- POS Device views -->
+    <record id="view_pos_device_form" model="ir.ui.view">
+        <field name="name">greenlight.pos.device.form</field>
+        <field name="model">greenlight.pos.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g., Epson TM-T88VI"/></h1>
+                    </div>
+                    <group>
+                        <group string="Assignment">
+                            <field name="station_id"/>
+                            <field name="device_type"/>
+                            <field name="is_active"/>
+                        </group>
+                        <group string="Connection">
+                            <field name="connection_type"/>
+                            <field name="ip_address"
+                                   invisible="connection_type not in ('network',)"/>
+                            <field name="port"
+                                   invisible="connection_type not in ('network',)"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Hardware Info">
+                            <field name="manufacturer"/>
+                            <field name="model_name"/>
+                            <field name="serial_number"/>
+                        </group>
+                        <group string="Status">
+                            <field name="status" readonly="1"/>
+                            <field name="last_seen" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Device Settings">
+                        <field name="settings_json" widget="text"
+                               placeholder='{"paper_width": 80, "auto_cut": true}'/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pos_device_list" model="ir.ui.view">
+        <field name="name">greenlight.pos.device.list</field>
+        <field name="model">greenlight.pos.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="station_id"/>
+                <field name="device_type"/>
+                <field name="connection_type"/>
+                <field name="ip_address"/>
+                <field name="is_active"/>
+                <field name="status"
+                       decoration-success="status == 'online'"
+                       decoration-danger="status == 'error'"
+                       decoration-muted="status == 'offline'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pos_device_search" model="ir.ui.view">
+        <field name="name">greenlight.pos.device.search</field>
+        <field name="model">greenlight.pos.device</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Active" name="active" domain="[('is_active', '=', True)]"/>
+                <filter string="Online" name="online" domain="[('status', '=', 'online')]"/>
+                <group string="Group By">
+                    <filter string="Station" name="group_station"
+                            context="{'group_by': 'station_id'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'device_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pos_device" model="ir.actions.act_window">
+        <field name="name">POS Devices</field>
+        <field name="res_model">greenlight.pos.device</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

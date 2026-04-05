@@ -23,6 +23,13 @@ class GreenLightEmployee(models.Model):
     )
     is_active = fields.Boolean(default=True, tracking=True)
 
+    security_role_id = fields.Many2one(
+        "greenlight.security.role",
+        string="Security Role",
+        ondelete="restrict",
+        help="Granular permission role for this employee.",
+    )
+
     # MFA
     mfa_enabled = fields.Boolean("MFA Enabled", default=False)
     totp_secret = fields.Char("TOTP Secret", groups="greenlight_pos.group_admin")

@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ===== SALES PERMISSIONS ===== -->
+        <record id="perm_sales_create" model="greenlight.permission">
+            <field name="name">sales.create</field>
+            <field name="display_name_label">Create Transactions</field>
+            <field name="category">sales</field>
+            <field name="description">Create new POS transactions</field>
+        </record>
+        <record id="perm_sales_view" model="greenlight.permission">
+            <field name="name">sales.view</field>
+            <field name="display_name_label">View Transactions</field>
+            <field name="category">sales</field>
+            <field name="description">View transaction history and details</field>
+        </record>
+        <record id="perm_sales_void" model="greenlight.permission">
+            <field name="name">sales.void</field>
+            <field name="display_name_label">Void Transactions</field>
+            <field name="category">sales</field>
+            <field name="description">Void confirmed transactions</field>
+        </record>
+        <record id="perm_sales_refund" model="greenlight.permission">
+            <field name="name">sales.refund</field>
+            <field name="display_name_label">Process Refunds</field>
+            <field name="category">sales</field>
+            <field name="description">Create and process refunds</field>
+        </record>
+        <record id="perm_sales_discount" model="greenlight.permission">
+            <field name="name">sales.discount</field>
+            <field name="display_name_label">Apply Discounts</field>
+            <field name="category">sales</field>
+            <field name="description">Apply manual discounts to line items</field>
+        </record>
+        <record id="perm_sales_cash_drawer" model="greenlight.permission">
+            <field name="name">sales.cash_drawer</field>
+            <field name="display_name_label">Manage Cash Drawer</field>
+            <field name="category">sales</field>
+            <field name="description">Open, close, and reconcile cash drawers</field>
+        </record>
+        <record id="perm_sales_receipt_reprint" model="greenlight.permission">
+            <field name="name">sales.receipt_reprint</field>
+            <field name="display_name_label">Reprint Receipts</field>
+            <field name="category">sales</field>
+            <field name="description">Reprint transaction receipts</field>
+        </record>
+
+        <!-- ===== INVENTORY PERMISSIONS ===== -->
+        <record id="perm_inventory_view" model="greenlight.permission">
+            <field name="name">inventory.view</field>
+            <field name="display_name_label">View Inventory</field>
+            <field name="category">inventory</field>
+            <field name="description">View product stock levels</field>
+        </record>
+        <record id="perm_inventory_adjust" model="greenlight.permission">
+            <field name="name">inventory.adjust</field>
+            <field name="display_name_label">Adjust Inventory</field>
+            <field name="category">inventory</field>
+            <field name="description">Create inventory adjustments</field>
+        </record>
+        <record id="perm_inventory_count" model="greenlight.permission">
+            <field name="name">inventory.count</field>
+            <field name="display_name_label">Perform Inventory Counts</field>
+            <field name="category">inventory</field>
+            <field name="description">Perform physical inventory counts</field>
+        </record>
+        <record id="perm_inventory_receive" model="greenlight.permission">
+            <field name="name">inventory.receive</field>
+            <field name="display_name_label">Receive Inventory</field>
+            <field name="category">inventory</field>
+            <field name="description">Receive purchase orders and update stock</field>
+        </record>
+        <record id="perm_inventory_purchase_order" model="greenlight.permission">
+            <field name="name">inventory.purchase_order</field>
+            <field name="display_name_label">Manage Purchase Orders</field>
+            <field name="category">inventory</field>
+            <field name="description">Create and manage purchase orders</field>
+        </record>
+        <record id="perm_inventory_product_create" model="greenlight.permission">
+            <field name="name">inventory.product_create</field>
+            <field name="display_name_label">Create Products</field>
+            <field name="category">inventory</field>
+            <field name="description">Add new products to the catalog</field>
+        </record>
+        <record id="perm_inventory_product_edit" model="greenlight.permission">
+            <field name="name">inventory.product_edit</field>
+            <field name="display_name_label">Edit Products</field>
+            <field name="category">inventory</field>
+            <field name="description">Modify product details, pricing, and categories</field>
+        </record>
+
+        <!-- ===== CUSTOMER PERMISSIONS ===== -->
+        <record id="perm_customers_view" model="greenlight.permission">
+            <field name="name">customers.view</field>
+            <field name="display_name_label">View Customers</field>
+            <field name="category">customers</field>
+            <field name="description">View patient/customer records</field>
+        </record>
+        <record id="perm_customers_create" model="greenlight.permission">
+            <field name="name">customers.create</field>
+            <field name="display_name_label">Create Customers</field>
+            <field name="category">customers</field>
+            <field name="description">Register new patients/customers</field>
+        </record>
+        <record id="perm_customers_edit" model="greenlight.permission">
+            <field name="name">customers.edit</field>
+            <field name="display_name_label">Edit Customers</field>
+            <field name="category">customers</field>
+            <field name="description">Modify patient/customer information</field>
+        </record>
+        <record id="perm_customers_delete" model="greenlight.permission">
+            <field name="name">customers.delete</field>
+            <field name="display_name_label">Delete Customers</field>
+            <field name="category">customers</field>
+            <field name="description">Remove patient/customer records</field>
+        </record>
+        <record id="perm_customers_medical" model="greenlight.permission">
+            <field name="name">customers.medical</field>
+            <field name="display_name_label">View Medical Info (PHI)</field>
+            <field name="category">customers</field>
+            <field name="description">Access protected health information: medical card, physician, conditions</field>
+        </record>
+        <record id="perm_customers_loyalty" model="greenlight.permission">
+            <field name="name">customers.loyalty</field>
+            <field name="display_name_label">Manage Loyalty Points</field>
+            <field name="category">customers</field>
+            <field name="description">Add, remove, or redeem loyalty points</field>
+        </record>
+
+        <!-- ===== REPORTS PERMISSIONS ===== -->
+        <record id="perm_reports_sales" model="greenlight.permission">
+            <field name="name">reports.sales</field>
+            <field name="display_name_label">View Sales Reports</field>
+            <field name="category">reports</field>
+            <field name="description">Access daily sales summaries and trends</field>
+        </record>
+        <record id="perm_reports_inventory" model="greenlight.permission">
+            <field name="name">reports.inventory</field>
+            <field name="display_name_label">View Inventory Reports</field>
+            <field name="category">reports</field>
+            <field name="description">Access inventory turnover, dead stock, and alert reports</field>
+        </record>
+        <record id="perm_reports_employee" model="greenlight.permission">
+            <field name="name">reports.employee</field>
+            <field name="display_name_label">View Employee Reports</field>
+            <field name="category">reports</field>
+            <field name="description">Access employee performance metrics</field>
+        </record>
+        <record id="perm_reports_cogs" model="greenlight.permission">
+            <field name="name">reports.cogs</field>
+            <field name="display_name_label">View 280E COGS Report</field>
+            <field name="category">reports</field>
+            <field name="description">Access Section 280E COGS compliance report</field>
+        </record>
+        <record id="perm_reports_export" model="greenlight.permission">
+            <field name="name">reports.export</field>
+            <field name="display_name_label">Export Reports</field>
+            <field name="category">reports</field>
+            <field name="description">Export report data to CSV or PDF</field>
+        </record>
+
+        <!-- ===== EMPLOYEES PERMISSIONS ===== -->
+        <record id="perm_employees_view" model="greenlight.permission">
+            <field name="name">employees.view</field>
+            <field name="display_name_label">View Employees</field>
+            <field name="category">employees</field>
+            <field name="description">View employee list and details</field>
+        </record>
+        <record id="perm_employees_create" model="greenlight.permission">
+            <field name="name">employees.create</field>
+            <field name="display_name_label">Create Employees</field>
+            <field name="category">employees</field>
+            <field name="description">Add new employees</field>
+        </record>
+        <record id="perm_employees_edit" model="greenlight.permission">
+            <field name="name">employees.edit</field>
+            <field name="display_name_label">Edit Employees</field>
+            <field name="category">employees</field>
+            <field name="description">Modify employee profiles and assignments</field>
+        </record>
+        <record id="perm_employees_roles" model="greenlight.permission">
+            <field name="name">employees.roles</field>
+            <field name="display_name_label">Assign Roles</field>
+            <field name="category">employees</field>
+            <field name="description">Assign security roles to employees</field>
+        </record>
+        <record id="perm_employees_pin_reset" model="greenlight.permission">
+            <field name="name">employees.pin_reset</field>
+            <field name="display_name_label">Reset PINs</field>
+            <field name="category">employees</field>
+            <field name="description">Reset employee PINs</field>
+        </record>
+
+        <!-- ===== SETTINGS PERMISSIONS ===== -->
+        <record id="perm_settings_view" model="greenlight.permission">
+            <field name="name">settings.view</field>
+            <field name="display_name_label">View Settings</field>
+            <field name="category">settings</field>
+            <field name="description">View dispensary settings</field>
+        </record>
+        <record id="perm_settings_edit" model="greenlight.permission">
+            <field name="name">settings.edit</field>
+            <field name="display_name_label">Edit Settings</field>
+            <field name="category">settings</field>
+            <field name="description">Modify dispensary settings, tax rates, and configuration</field>
+        </record>
+        <record id="perm_settings_audit_log" model="greenlight.permission">
+            <field name="name">settings.audit_log</field>
+            <field name="display_name_label">View Audit Logs</field>
+            <field name="category">settings</field>
+            <field name="description">Access audit log and change history</field>
+        </record>
+
+        <!-- ===== COMPLIANCE PERMISSIONS ===== -->
+        <record id="perm_compliance_metrc" model="greenlight.permission">
+            <field name="name">compliance.metrc</field>
+            <field name="display_name_label">Metrc Integration</field>
+            <field name="category">compliance</field>
+            <field name="description">View and manage Metrc seed-to-sale sync</field>
+        </record>
+        <record id="perm_compliance_purchase_limits" model="greenlight.permission">
+            <field name="name">compliance.purchase_limits</field>
+            <field name="display_name_label">Override Purchase Limits</field>
+            <field name="category">compliance</field>
+            <field name="description">Override MMCEU purchase limit warnings</field>
+        </record>
+
+        <!-- ===== SYSTEM ROLES ===== -->
+        <record id="role_budtender" model="greenlight.security.role">
+            <field name="name">Budtender</field>
+            <field name="description">Front-line dispensary staff. Can create transactions, view products, and manage basic customer interactions.</field>
+            <field name="is_system">True</field>
+        </record>
+        <record id="role_manager" model="greenlight.security.role">
+            <field name="name">Manager</field>
+            <field name="description">Store manager with access to reports, inventory management, and employee oversight.</field>
+            <field name="is_system">True</field>
+        </record>
+        <record id="role_admin" model="greenlight.security.role">
+            <field name="name">Admin</field>
+            <field name="description">Full system administrator with access to all features, settings, and audit logs.</field>
+            <field name="is_system">True</field>
+        </record>
+
+        <!-- Budtender role permissions -->
+        <record id="rp_budtender_sales_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_sales_create"/>
+        </record>
+        <record id="rp_budtender_sales_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_sales_view"/>
+        </record>
+        <record id="rp_budtender_sales_receipt_reprint" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_sales_receipt_reprint"/>
+        </record>
+        <record id="rp_budtender_sales_cash_drawer" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_sales_cash_drawer"/>
+        </record>
+        <record id="rp_budtender_inventory_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_inventory_view"/>
+        </record>
+        <record id="rp_budtender_customers_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_customers_view"/>
+        </record>
+        <record id="rp_budtender_customers_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_customers_create"/>
+        </record>
+        <record id="rp_budtender_customers_loyalty" model="greenlight.role.permission">
+            <field name="role_id" ref="role_budtender"/>
+            <field name="permission_id" ref="perm_customers_loyalty"/>
+        </record>
+
+        <!-- Manager role permissions (inherits budtender + more) -->
+        <record id="rp_manager_sales_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_create"/>
+        </record>
+        <record id="rp_manager_sales_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_view"/>
+        </record>
+        <record id="rp_manager_sales_void" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_void"/>
+        </record>
+        <record id="rp_manager_sales_refund" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_refund"/>
+        </record>
+        <record id="rp_manager_sales_discount" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_discount"/>
+        </record>
+        <record id="rp_manager_sales_cash_drawer" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_cash_drawer"/>
+        </record>
+        <record id="rp_manager_sales_receipt_reprint" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_sales_receipt_reprint"/>
+        </record>
+        <record id="rp_manager_inventory_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_view"/>
+        </record>
+        <record id="rp_manager_inventory_adjust" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_adjust"/>
+        </record>
+        <record id="rp_manager_inventory_count" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_count"/>
+        </record>
+        <record id="rp_manager_inventory_receive" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_receive"/>
+        </record>
+        <record id="rp_manager_inventory_purchase_order" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_purchase_order"/>
+        </record>
+        <record id="rp_manager_inventory_product_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_product_create"/>
+        </record>
+        <record id="rp_manager_inventory_product_edit" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_inventory_product_edit"/>
+        </record>
+        <record id="rp_manager_customers_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_customers_view"/>
+        </record>
+        <record id="rp_manager_customers_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_customers_create"/>
+        </record>
+        <record id="rp_manager_customers_edit" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_customers_edit"/>
+        </record>
+        <record id="rp_manager_customers_loyalty" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_customers_loyalty"/>
+        </record>
+        <record id="rp_manager_reports_sales" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_reports_sales"/>
+        </record>
+        <record id="rp_manager_reports_inventory" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_reports_inventory"/>
+        </record>
+        <record id="rp_manager_reports_employee" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_reports_employee"/>
+        </record>
+        <record id="rp_manager_reports_cogs" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_reports_cogs"/>
+        </record>
+        <record id="rp_manager_employees_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_manager"/>
+            <field name="permission_id" ref="perm_employees_view"/>
+        </record>
+
+        <!-- Admin role permissions (all 35) -->
+        <record id="rp_admin_sales_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_create"/>
+        </record>
+        <record id="rp_admin_sales_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_view"/>
+        </record>
+        <record id="rp_admin_sales_void" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_void"/>
+        </record>
+        <record id="rp_admin_sales_refund" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_refund"/>
+        </record>
+        <record id="rp_admin_sales_discount" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_discount"/>
+        </record>
+        <record id="rp_admin_sales_cash_drawer" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_cash_drawer"/>
+        </record>
+        <record id="rp_admin_sales_receipt_reprint" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_sales_receipt_reprint"/>
+        </record>
+        <record id="rp_admin_inventory_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_view"/>
+        </record>
+        <record id="rp_admin_inventory_adjust" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_adjust"/>
+        </record>
+        <record id="rp_admin_inventory_count" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_count"/>
+        </record>
+        <record id="rp_admin_inventory_receive" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_receive"/>
+        </record>
+        <record id="rp_admin_inventory_purchase_order" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_purchase_order"/>
+        </record>
+        <record id="rp_admin_inventory_product_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_product_create"/>
+        </record>
+        <record id="rp_admin_inventory_product_edit" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_inventory_product_edit"/>
+        </record>
+        <record id="rp_admin_customers_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_customers_view"/>
+        </record>
+        <record id="rp_admin_customers_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_customers_create"/>
+        </record>
+        <record id="rp_admin_customers_edit" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_customers_edit"/>
+        </record>
+        <record id="rp_admin_customers_delete" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_customers_delete"/>
+        </record>
+        <record id="rp_admin_customers_medical" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_customers_medical"/>
+        </record>
+        <record id="rp_admin_customers_loyalty" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_customers_loyalty"/>
+        </record>
+        <record id="rp_admin_reports_sales" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_reports_sales"/>
+        </record>
+        <record id="rp_admin_reports_inventory" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_reports_inventory"/>
+        </record>
+        <record id="rp_admin_reports_employee" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_reports_employee"/>
+        </record>
+        <record id="rp_admin_reports_cogs" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_reports_cogs"/>
+        </record>
+        <record id="rp_admin_reports_export" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_reports_export"/>
+        </record>
+        <record id="rp_admin_employees_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_employees_view"/>
+        </record>
+        <record id="rp_admin_employees_create" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_employees_create"/>
+        </record>
+        <record id="rp_admin_employees_edit" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_employees_edit"/>
+        </record>
+        <record id="rp_admin_employees_roles" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_employees_roles"/>
+        </record>
+        <record id="rp_admin_employees_pin_reset" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_employees_pin_reset"/>
+        </record>
+        <record id="rp_admin_settings_view" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_settings_view"/>
+        </record>
+        <record id="rp_admin_settings_edit" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_settings_edit"/>
+        </record>
+        <record id="rp_admin_settings_audit_log" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_settings_audit_log"/>
+        </record>
+        <record id="rp_admin_compliance_metrc" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_compliance_metrc"/>
+        </record>
+        <record id="rp_admin_compliance_purchase_limits" model="greenlight.role.permission">
+            <field name="role_id" ref="role_admin"/>
+            <field name="permission_id" ref="perm_compliance_purchase_limits"/>
+        </record>
+    </data>
+</odoo>

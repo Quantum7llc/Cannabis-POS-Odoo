@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================== SALES ANALYTICS ==================== -->
+
+    <!-- Sales Report List View -->
+    <record id="view_sales_report_tree" model="ir.ui.view">
+        <field name="name">greenlight.sales.report.tree</field>
+        <field name="model">greenlight.sales.report</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="date_day"/>
+                <field name="employee_id" optional="show"/>
+                <field name="product_id" optional="show"/>
+                <field name="category_id" optional="show"/>
+                <field name="cannabis_type" optional="hide"/>
+                <field name="payment_method" optional="hide"/>
+                <field name="revenue" sum="Total Revenue"/>
+                <field name="tax_collected" sum="Total Tax" optional="show"/>
+                <field name="cogs" sum="Total COGS" optional="show"/>
+                <field name="gross_margin" sum="Total Margin"/>
+                <field name="quantity_sold" sum="Total Qty"/>
+                <field name="transaction_count" sum="Total Txns"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Sales Report Graph View (bar chart by day) -->
+    <record id="view_sales_report_graph" model="ir.ui.view">
+        <field name="name">greenlight.sales.report.graph</field>
+        <field name="model">greenlight.sales.report</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Analytics" type="bar">
+                <field name="date_day" type="row"/>
+                <field name="revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Sales Report Pivot View -->
+    <record id="view_sales_report_pivot" model="ir.ui.view">
+        <field name="name">greenlight.sales.report.pivot</field>
+        <field name="model">greenlight.sales.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Sales Pivot">
+                <field name="date_day" type="row"/>
+                <field name="category_id" type="col"/>
+                <field name="revenue" type="measure"/>
+                <field name="cogs" type="measure"/>
+                <field name="gross_margin" type="measure"/>
+                <field name="quantity_sold" type="measure"/>
+                <field name="transaction_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Sales Report Search View -->
+    <record id="view_sales_report_search" model="ir.ui.view">
+        <field name="name">greenlight.sales.report.search</field>
+        <field name="model">greenlight.sales.report</field>
+        <field name="arch" type="xml">
+            <search string="Sales Analytics">
+                <field name="employee_id"/>
+                <field name="product_id"/>
+                <field name="category_id"/>
+                <filter name="filter_today" string="Today"
+                        domain="[('date_day', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="filter_this_week" string="This Week"
+                        domain="[('date_day', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="filter_this_month" string="This Month"
+                        domain="[('date_day', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="group_day" string="Day" context="{'group_by': 'date_day'}"/>
+                <filter name="group_month" string="Month" context="{'group_by': 'date_month'}"/>
+                <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+                <filter name="group_cannabis_type" string="Cannabis Type" context="{'group_by': 'cannabis_type'}"/>
+                <filter name="group_payment" string="Payment Method" context="{'group_by': 'payment_method'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Sales Report Action - Daily Summary -->
+    <record id="action_sales_report" model="ir.actions.act_window">
+        <field name="name">Sales Analytics</field>
+        <field name="res_model">greenlight.sales.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="view_sales_report_search"/>
+        <field name="context">{'search_default_filter_this_month': 1}</field>
+    </record>
+
+    <!-- Sales by Category Action -->
+    <record id="action_sales_by_category" model="ir.actions.act_window">
+        <field name="name">Sales by Category</field>
+        <field name="res_model">greenlight.sales.report</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="view_sales_report_search"/>
+        <field name="context">{
+            'search_default_group_category': 1,
+            'search_default_filter_this_month': 1,
+        }</field>
+    </record>
+
+    <!-- ==================== PRODUCT PERFORMANCE ==================== -->
+
+    <!-- Product Performance List View -->
+    <record id="view_product_performance_tree" model="ir.ui.view">
+        <field name="name">greenlight.product.performance.tree</field>
+        <field name="model">greenlight.product.performance</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="product_id"/>
+                <field name="category_id"/>
+                <field name="cannabis_type"/>
+                <field name="total_revenue" sum="Total"/>
+                <field name="total_cogs" sum="Total"/>
+                <field name="gross_margin" sum="Total"/>
+                <field name="margin_pct" avg="Avg"/>
+                <field name="total_qty_sold" sum="Total"/>
+                <field name="transaction_count" sum="Total"/>
+                <field name="avg_unit_price"/>
+                <field name="current_stock"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Product Performance Graph View -->
+    <record id="view_product_performance_graph" model="ir.ui.view">
+        <field name="name">greenlight.product.performance.graph</field>
+        <field name="model">greenlight.product.performance</field>
+        <field name="arch" type="xml">
+            <graph string="Product Performance" type="bar">
+                <field name="product_id" type="row"/>
+                <field name="total_revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Product Performance Pivot View -->
+    <record id="view_product_performance_pivot" model="ir.ui.view">
+        <field name="name">greenlight.product.performance.pivot</field>
+        <field name="model">greenlight.product.performance</field>
+        <field name="arch" type="xml">
+            <pivot string="Product Performance">
+                <field name="category_id" type="row"/>
+                <field name="product_id" type="row"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="total_cogs" type="measure"/>
+                <field name="gross_margin" type="measure"/>
+                <field name="total_qty_sold" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Product Performance Search View -->
+    <record id="view_product_performance_search" model="ir.ui.view">
+        <field name="name">greenlight.product.performance.search</field>
+        <field name="model">greenlight.product.performance</field>
+        <field name="arch" type="xml">
+            <search string="Product Performance">
+                <field name="product_id"/>
+                <field name="category_id"/>
+                <filter name="filter_flower" string="Flower"
+                        domain="[('cannabis_type', '=', 'flower')]"/>
+                <filter name="filter_concentrate" string="Concentrate"
+                        domain="[('cannabis_type', '=', 'concentrate')]"/>
+                <filter name="filter_infused" string="Infused/Edible"
+                        domain="[('cannabis_type', '=', 'infused')]"/>
+                <filter name="filter_accessory" string="Accessory"
+                        domain="[('cannabis_type', '=', 'accessory')]"/>
+                <separator/>
+                <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+                <filter name="group_type" string="Cannabis Type" context="{'group_by': 'cannabis_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Product Performance Action -->
+    <record id="action_product_performance" model="ir.actions.act_window">
+        <field name="name">Product Performance</field>
+        <field name="res_model">greenlight.product.performance</field>
+        <field name="view_mode">list,graph,pivot</field>
+        <field name="search_view_id" ref="view_product_performance_search"/>
+    </record>
+
+    <!-- ==================== EMPLOYEE PERFORMANCE ==================== -->
+
+    <!-- Employee Performance List View -->
+    <record id="view_employee_performance_tree" model="ir.ui.view">
+        <field name="name">greenlight.employee.performance.tree</field>
+        <field name="model">greenlight.employee.performance</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="employee_id"/>
+                <field name="total_revenue" sum="Total"/>
+                <field name="total_tax" sum="Total"/>
+                <field name="total_cogs" sum="Total"/>
+                <field name="gross_margin" sum="Total"/>
+                <field name="transaction_count" sum="Total"/>
+                <field name="avg_ticket"/>
+                <field name="items_sold" sum="Total"/>
+                <field name="unique_customers"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Employee Performance Graph View -->
+    <record id="view_employee_performance_graph" model="ir.ui.view">
+        <field name="name">greenlight.employee.performance.graph</field>
+        <field name="model">greenlight.employee.performance</field>
+        <field name="arch" type="xml">
+            <graph string="Employee Performance" type="bar">
+                <field name="employee_id" type="row"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="transaction_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Employee Performance Search View -->
+    <record id="view_employee_performance_search" model="ir.ui.view">
+        <field name="name">greenlight.employee.performance.search</field>
+        <field name="model">greenlight.employee.performance</field>
+        <field name="arch" type="xml">
+            <search string="Employee Performance">
+                <field name="employee_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Employee Performance Action -->
+    <record id="action_employee_performance" model="ir.actions.act_window">
+        <field name="name">Employee Performance</field>
+        <field name="res_model">greenlight.employee.performance</field>
+        <field name="view_mode">list,graph</field>
+        <field name="search_view_id" ref="view_employee_performance_search"/>
+    </record>
+
+    <!-- ==================== CUSTOMER ANALYTICS ==================== -->
+
+    <!-- Customer Analytics List View -->
+    <record id="view_customer_analytics_tree" model="ir.ui.view">
+        <field name="name">greenlight.customer.analytics.tree</field>
+        <field name="model">greenlight.customer.analytics</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0"
+                  decoration-warning="days_since_last &gt; 30"
+                  decoration-danger="days_since_last &gt; 90">
+                <field name="customer_id"/>
+                <field name="lifetime_spend" sum="Total"/>
+                <field name="visit_count" sum="Total"/>
+                <field name="avg_ticket"/>
+                <field name="first_visit"/>
+                <field name="last_visit"/>
+                <field name="days_since_last"/>
+                <field name="loyalty_points" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Customer Analytics Search View -->
+    <record id="view_customer_analytics_search" model="ir.ui.view">
+        <field name="name">greenlight.customer.analytics.search</field>
+        <field name="model">greenlight.customer.analytics</field>
+        <field name="arch" type="xml">
+            <search string="Customer Analytics">
+                <field name="customer_id"/>
+                <filter name="filter_active_30d" string="Active (30 days)"
+                        domain="[('days_since_last', '&lt;=', 30)]"/>
+                <filter name="filter_at_risk" string="At Risk (30-90 days)"
+                        domain="[('days_since_last', '&gt;', 30), ('days_since_last', '&lt;=', 90)]"/>
+                <filter name="filter_lapsed" string="Lapsed (90+ days)"
+                        domain="[('days_since_last', '&gt;', 90)]"/>
+                <separator/>
+                <filter name="filter_high_value" string="High Value ($500+)"
+                        domain="[('lifetime_spend', '&gt;=', 500)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Customer Analytics Action -->
+    <record id="action_customer_analytics" model="ir.actions.act_window">
+        <field name="name">Customer Analytics</field>
+        <field name="res_model">greenlight.customer.analytics</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_customer_analytics_search"/>
+    </record>
+
+    <!-- ==================== 280E COGS REPORT ==================== -->
+
+    <!-- COGS Report List View -->
+    <record id="view_cogs_report_tree" model="ir.ui.view">
+        <field name="name">greenlight.cogs.report.tree</field>
+        <field name="model">greenlight.cogs.report</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="date_month"/>
+                <field name="category_id"/>
+                <field name="cannabis_type"/>
+                <field name="total_revenue" sum="Total"/>
+                <field name="total_cogs" sum="Total"/>
+                <field name="total_tax" sum="Total"/>
+                <field name="gross_profit" sum="Total"/>
+                <field name="margin_pct" avg="Avg"/>
+                <field name="units_sold" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- COGS Report Pivot View -->
+    <record id="view_cogs_report_pivot" model="ir.ui.view">
+        <field name="name">greenlight.cogs.report.pivot</field>
+        <field name="model">greenlight.cogs.report</field>
+        <field name="arch" type="xml">
+            <pivot string="280E COGS Report">
+                <field name="date_month" type="row"/>
+                <field name="cannabis_type" type="col"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="total_cogs" type="measure"/>
+                <field name="gross_profit" type="measure"/>
+                <field name="units_sold" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- COGS Report Search View -->
+    <record id="view_cogs_report_search" model="ir.ui.view">
+        <field name="name">greenlight.cogs.report.search</field>
+        <field name="model">greenlight.cogs.report</field>
+        <field name="arch" type="xml">
+            <search string="280E COGS Report">
+                <field name="category_id"/>
+                <filter name="filter_flower" string="Flower"
+                        domain="[('cannabis_type', '=', 'flower')]"/>
+                <filter name="filter_concentrate" string="Concentrate"
+                        domain="[('cannabis_type', '=', 'concentrate')]"/>
+                <filter name="filter_infused" string="Infused/Edible"
+                        domain="[('cannabis_type', '=', 'infused')]"/>
+                <separator/>
+                <filter name="group_month" string="Month" context="{'group_by': 'date_month'}"/>
+                <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+                <filter name="group_type" string="Cannabis Type" context="{'group_by': 'cannabis_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- COGS Report Action -->
+    <record id="action_cogs_report" model="ir.actions.act_window">
+        <field name="name">280E COGS Report</field>
+        <field name="res_model">greenlight.cogs.report</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="search_view_id" ref="view_cogs_report_search"/>
+    </record>
+
+    <!-- ==================== INVENTORY ALERTS ==================== -->
+
+    <!-- Inventory Alert List View -->
+    <record id="view_inventory_alert_tree" model="ir.ui.view">
+        <field name="name">greenlight.inventory.alert.tree</field>
+        <field name="model">greenlight.inventory.alert</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0"
+                  decoration-danger="alert_type == 'out_of_stock'"
+                  decoration-warning="alert_type == 'low_stock'"
+                  decoration-muted="alert_type == 'dead_stock'">
+                <field name="product_id"/>
+                <field name="category_id"/>
+                <field name="alert_type"/>
+                <field name="inventory_count"/>
+                <field name="last_sold_date"/>
+                <field name="days_since_sold"/>
+                <field name="total_sold_30d"/>
+                <field name="daily_avg_sold"/>
+                <field name="days_of_stock"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Inventory Alert Search View -->
+    <record id="view_inventory_alert_search" model="ir.ui.view">
+        <field name="name">greenlight.inventory.alert.search</field>
+        <field name="model">greenlight.inventory.alert</field>
+        <field name="arch" type="xml">
+            <search string="Inventory Alerts">
+                <field name="product_id"/>
+                <field name="category_id"/>
+                <filter name="filter_out_of_stock" string="Out of Stock"
+                        domain="[('alert_type', '=', 'out_of_stock')]"/>
+                <filter name="filter_low_stock" string="Low Stock"
+                        domain="[('alert_type', '=', 'low_stock')]"/>
+                <filter name="filter_dead_stock" string="Dead Stock"
+                        domain="[('alert_type', '=', 'dead_stock')]"/>
+                <separator/>
+                <filter name="group_alert" string="Alert Type" context="{'group_by': 'alert_type'}"/>
+                <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Inventory Alert Action -->
+    <record id="action_inventory_alert" model="ir.actions.act_window">
+        <field name="name">Inventory Alerts</field>
+        <field name="res_model">greenlight.inventory.alert</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_inventory_alert_search"/>
+    </record>
+</odoo>

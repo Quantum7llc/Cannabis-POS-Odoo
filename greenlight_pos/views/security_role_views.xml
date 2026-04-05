@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================== SECURITY ROLES ==================== -->
+
+    <!-- Role List View -->
+    <record id="view_security_role_tree" model="ir.ui.view">
+        <field name="name">greenlight.security.role.tree</field>
+        <field name="model">greenlight.security.role</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="permission_count"/>
+                <field name="employee_count"/>
+                <field name="is_system"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Role Form View -->
+    <record id="view_security_role_form" model="ir.ui.view">
+        <field name="name">greenlight.security.role.form</field>
+        <field name="model">greenlight.security.role</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_permissions" type="object"
+                                class="oe_stat_button" icon="fa-key">
+                            <field name="permission_count" widget="statinfo" string="Permissions"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-users" type="object"
+                                name="action_view_permissions">
+                            <field name="employee_count" widget="statinfo" string="Employees"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Role Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="is_active"/>
+                            <field name="is_system"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Permissions">
+                            <field name="role_permission_ids">
+                                <list editable="bottom">
+                                    <field name="permission_id"/>
+                                    <field name="permission_category"/>
+                                    <field name="permission_description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Employees">
+                            <field name="employee_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="role"/>
+                                    <field name="is_active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Role Search View -->
+    <record id="view_security_role_search" model="ir.ui.view">
+        <field name="name">greenlight.security.role.search</field>
+        <field name="model">greenlight.security.role</field>
+        <field name="arch" type="xml">
+            <search string="Security Roles">
+                <field name="name"/>
+                <filter name="filter_active" string="Active" domain="[('is_active', '=', True)]"/>
+                <filter name="filter_system" string="System Roles" domain="[('is_system', '=', True)]"/>
+                <filter name="filter_custom" string="Custom Roles" domain="[('is_system', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Role Action -->
+    <record id="action_security_role" model="ir.actions.act_window">
+        <field name="name">Security Roles</field>
+        <field name="res_model">greenlight.security.role</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_security_role_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+    </record>
+
+    <!-- ==================== PERMISSIONS ==================== -->
+
+    <!-- Permission List View -->
+    <record id="view_permission_tree" model="ir.ui.view">
+        <field name="name">greenlight.permission.tree</field>
+        <field name="model">greenlight.permission</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="name"/>
+                <field name="display_name_label"/>
+                <field name="category"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Permission Form View -->
+    <record id="view_permission_form" model="ir.ui.view">
+        <field name="name">greenlight.permission.form</field>
+        <field name="model">greenlight.permission</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="display_name_label"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Permission Search View -->
+    <record id="view_permission_search" model="ir.ui.view">
+        <field name="name">greenlight.permission.search</field>
+        <field name="model">greenlight.permission</field>
+        <field name="arch" type="xml">
+            <search string="Permissions">
+                <field name="name"/>
+                <field name="display_name_label"/>
+                <field name="category"/>
+                <filter name="cat_sales" string="Sales" domain="[('category', '=', 'sales')]"/>
+                <filter name="cat_inventory" string="Inventory" domain="[('category', '=', 'inventory')]"/>
+                <filter name="cat_customers" string="Customers" domain="[('category', '=', 'customers')]"/>
+                <filter name="cat_reports" string="Reports" domain="[('category', '=', 'reports')]"/>
+                <filter name="cat_employees" string="Employees" domain="[('category', '=', 'employees')]"/>
+                <filter name="cat_settings" string="Settings" domain="[('category', '=', 'settings')]"/>
+                <filter name="cat_compliance" string="Compliance" domain="[('category', '=', 'compliance')]"/>
+                <separator/>
+                <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Permission Action -->
+    <record id="action_permission" model="ir.actions.act_window">
+        <field name="name">Permissions</field>
+        <field name="res_model">greenlight.permission</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_permission_search"/>
+        <field name="context">{'search_default_group_category': 1}</field>
+    </record>
+</odoo>

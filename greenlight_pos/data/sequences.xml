@@ -42,5 +42,19 @@
             <field name="prefix">RFD/%(year)s/</field>
             <field name="padding">5</field>
         </record>
+
+        <record id="seq_greenlight_order" model="ir.sequence">
+            <field name="name">Green Light Order</field>
+            <field name="code">greenlight.order</field>
+            <field name="prefix">ORD/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="seq_greenlight_stock_transfer" model="ir.sequence">
+            <field name="name">Green Light Stock Transfer</field>
+            <field name="code">greenlight.stock.transfer</field>
+            <field name="prefix">XFR/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
     </data>
 </odoo>

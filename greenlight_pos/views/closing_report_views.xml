@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_closing_report_form" model="ir.ui.view">
+        <field name="name">greenlight.closing.report.form</field>
+        <field name="model">greenlight.closing.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate" type="object" string="Generate Report"
+                            class="btn-primary"
+                            invisible="state == 'confirmed'"/>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            class="btn-success"
+                            invisible="state == 'confirmed'"
+                            confirm="Confirm this closing report? This cannot be undone."/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Report Info">
+                            <field name="report_date" readonly="state == 'confirmed'"/>
+                            <field name="employee_id" readonly="state == 'confirmed'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Transaction Summary">
+                            <field name="transaction_count" readonly="1"/>
+                            <field name="void_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Sales by Payment Method">
+                            <field name="total_cash" readonly="1"/>
+                            <field name="total_debit" readonly="1"/>
+                            <field name="total_card" readonly="1"/>
+                        </group>
+                        <group string="Totals">
+                            <field name="gross_sales" readonly="1"/>
+                            <field name="tax_collected" readonly="1"/>
+                            <field name="net_sales" readonly="1"/>
+                            <field name="refund_total" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Cash Reconciliation">
+                        <group>
+                            <field name="expected_cash" readonly="1"/>
+                            <field name="actual_cash" readonly="state == 'confirmed'"/>
+                            <field name="cash_variance" readonly="1"
+                                   decoration-danger="cash_variance &lt; 0"
+                                   decoration-success="cash_variance == 0"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="End-of-day notes..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_closing_report_list" model="ir.ui.view">
+        <field name="name">greenlight.closing.report.list</field>
+        <field name="model">greenlight.closing.report</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="report_date"/>
+                <field name="employee_id"/>
+                <field name="transaction_count"/>
+                <field name="gross_sales"/>
+                <field name="tax_collected"/>
+                <field name="total_cash"/>
+                <field name="cash_variance"
+                       decoration-danger="cash_variance &lt; 0"
+                       decoration-success="cash_variance == 0"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_closing_report_search" model="ir.ui.view">
+        <field name="name">greenlight.closing.report.search</field>
+        <field name="model">greenlight.closing.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <group string="Group By">
+                    <filter string="Date" name="group_date"
+                            context="{'group_by': 'report_date'}"/>
+                    <filter string="Employee" name="group_employee"
+                            context="{'group_by': 'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_closing_report" model="ir.actions.act_window">
+        <field name="name">Closing Reports</field>
+        <field name="res_model">greenlight.closing.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =================================================================
+         Location
+         ================================================================= -->
+
+    <record id="view_location_form" model="ir.ui.view">
+        <field name="name">greenlight.location.form</field>
+        <field name="model">greenlight.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Location Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Address">
+                            <field name="address"/>
+                            <field name="city"/>
+                            <field name="state"/>
+                            <field name="zip"/>
+                        </group>
+                        <group string="Contact">
+                            <field name="phone" widget="phone"/>
+                            <field name="is_active"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_location_tree" model="ir.ui.view">
+        <field name="name">greenlight.location.tree</field>
+        <field name="model">greenlight.location</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="address"/>
+                <field name="city"/>
+                <field name="state"/>
+                <field name="zip"/>
+                <field name="phone"/>
+                <field name="room_count" string="Rooms"/>
+                <field name="inventory_count" string="Products"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_location_search" model="ir.ui.view">
+        <field name="name">greenlight.location.search</field>
+        <field name="model">greenlight.location</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="active" string="Active" domain="[('is_active', '=', True)]"/>
+                <filter name="archived" string="Archived" domain="[('is_active', '=', False)]"/>
+                <separator/>
+                <filter name="group_city" string="City" context="{'group_by': 'city'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_location" model="ir.actions.act_window">
+        <field name="name">Locations</field>
+        <field name="res_model">greenlight.location</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <!-- =================================================================
+         Room
+         ================================================================= -->
+
+    <record id="view_room_form" model="ir.ui.view">
+        <field name="name">greenlight.room.form</field>
+        <field name="model">greenlight.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="room_type"/>
+                        </group>
+                        <group>
+                            <field name="location_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_room_tree" model="ir.ui.view">
+        <field name="name">greenlight.room.tree</field>
+        <field name="model">greenlight.room</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="room_type"/>
+                <field name="location_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_room_search" model="ir.ui.view">
+        <field name="name">greenlight.room.search</field>
+        <field name="model">greenlight.room</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="type_dispensary" string="Dispensary" domain="[('room_type', '=', 'dispensary')]"/>
+                <filter name="type_safe" string="Safe" domain="[('room_type', '=', 'safe')]"/>
+                <filter name="type_storage" string="Storage" domain="[('room_type', '=', 'storage')]"/>
+                <filter name="type_processing" string="Processing" domain="[('room_type', '=', 'processing')]"/>
+                <separator/>
+                <filter name="group_location" string="Location" context="{'group_by': 'location_id'}"/>
+                <filter name="group_type" string="Type" context="{'group_by': 'room_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_room" model="ir.actions.act_window">
+        <field name="name">Rooms</field>
+        <field name="res_model">greenlight.room</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- =================================================================
+         Location Inventory
+         ================================================================= -->
+
+    <record id="view_location_inventory_form" model="ir.ui.view">
+        <field name="name">greenlight.location.inventory.form</field>
+        <field name="model">greenlight.location.inventory</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Product">
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                        </group>
+                        <group string="Location">
+                            <field name="location_id"/>
+                            <field name="room_id" domain="[('location_id', '=', location_id)]"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_location_inventory_tree" model="ir.ui.view">
+        <field name="name">greenlight.location.inventory.tree</field>
+        <field name="model">greenlight.location.inventory</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="product_id"/>
+                <field name="location_id"/>
+                <field name="room_id" domain="[('location_id', '=', location_id)]" optional="show"/>
+                <field name="quantity"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_location_inventory_search" model="ir.ui.view">
+        <field name="name">greenlight.location.inventory.search</field>
+        <field name="model">greenlight.location.inventory</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="in_stock" string="In Stock" domain="[('quantity', '&gt;', 0)]"/>
+                <filter name="out_of_stock" string="Out of Stock" domain="[('quantity', '=', 0)]"/>
+                <separator/>
+                <filter name="group_location" string="Location" context="{'group_by': 'location_id'}"/>
+                <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                <filter name="group_room" string="Room" context="{'group_by': 'room_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_location_inventory" model="ir.actions.act_window">
+        <field name="name">Location Inventory</field>
+        <field name="res_model">greenlight.location.inventory</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_in_stock': 1}</field>
+    </record>
+
+    <!-- =================================================================
+         Stock Transfer
+         ================================================================= -->
+
+    <record id="view_stock_transfer_form" model="ir.ui.view">
+        <field name="name">greenlight.stock.transfer.form</field>
+        <field name="model">greenlight.stock.transfer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm &amp; Deduct"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"
+                            confirm="This will deduct stock from the source location. Continue?"/>
+                    <button name="action_receive" string="Receive at Destination"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'confirmed'"
+                            confirm="This will add stock to the destination location. Continue?"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state not in ('draft', 'confirmed')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,received"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Locations">
+                            <field name="source_location_id"/>
+                            <field name="dest_location_id"/>
+                        </group>
+                        <group string="Details">
+                            <field name="employee_id"/>
+                            <field name="metrc_manifest_id"/>
+                            <field name="confirmed_at" invisible="state == 'draft'"/>
+                            <field name="received_at" invisible="state not in ('received',)"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Transfer Lines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_transfer_tree" model="ir.ui.view">
+        <field name="name">greenlight.stock.transfer.tree</field>
+        <field name="model">greenlight.stock.transfer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="source_location_id"/>
+                <field name="dest_location_id"/>
+                <field name="employee_id"/>
+                <field name="state"/>
+                <field name="line_count" string="Lines"/>
+                <field name="metrc_manifest_id" optional="show"/>
+                <field name="confirmed_at" optional="hide"/>
+                <field name="received_at" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_transfer_search" model="ir.ui.view">
+        <field name="name">greenlight.stock.transfer.search</field>
+        <field name="model">greenlight.stock.transfer</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="confirmed" string="In Transit" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="received" string="Received" domain="[('state', '=', 'received')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter name="group_source" string="Source" context="{'group_by': 'source_location_id'}"/>
+                <filter name="group_dest" string="Destination" context="{'group_by': 'dest_location_id'}"/>
+                <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_transfer" model="ir.actions.act_window">
+        <field name="name">Stock Transfers</field>
+        <field name="res_model">greenlight.stock.transfer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
