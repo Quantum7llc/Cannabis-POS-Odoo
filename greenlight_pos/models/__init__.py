@@ -4,3 +4,9 @@ from . import transaction
 from . import employee
 from . import cash_drawer
 from . import settings
+from . import inventory
+from . import receipt
+from . import order
+from . import queue
+from . import promotion
+from . import dashboard

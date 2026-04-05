@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================== -->
+    <!--                         RECEIPT VIEWS                              -->
+    <!-- ================================================================== -->
+
+    <record id="view_receipt_form" model="ir.ui.view">
+        <field name="name">greenlight.receipt.form</field>
+        <field name="model">greenlight.receipt</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_void_with_reason" type="object"
+                            string="Void Receipt" class="btn-danger"
+                            invisible="state != 'active'"
+                            groups="greenlight_pos.group_manager"/>
+                    <button name="action_email_receipt" type="object"
+                            string="Email Receipt" class="oe_highlight"
+                            invisible="state != 'active'"/>
+                    <button name="action_create_refund" type="object"
+                            string="Create Refund" class="btn-warning"
+                            invisible="state != 'active'"
+                            groups="greenlight_pos.group_manager"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_refunds" type="object"
+                                class="oe_stat_button" icon="fa-undo"
+                                invisible="refund_count == 0">
+                            <field name="refund_count" widget="statinfo" string="Refunds"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="receipt_number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Transaction Info">
+                            <field name="transaction_id"/>
+                            <field name="customer_id"/>
+                            <field name="customer_email"/>
+                            <field name="employee_id"/>
+                            <field name="payment_method"/>
+                        </group>
+                        <group string="Amounts">
+                            <field name="subtotal"/>
+                            <field name="tax_amount"/>
+                            <field name="total"/>
+                            <field name="total_refunded"/>
+                        </group>
+                    </group>
+                    <group invisible="state != 'voided'" string="Void Information">
+                        <group>
+                            <field name="void_date"/>
+                            <field name="voided_by_id"/>
+                        </group>
+                        <group>
+                            <field name="void_reason"/>
+                        </group>
+                    </group>
+                    <group string="Dispensary Info">
+                        <group>
+                            <field name="dispensary_name"/>
+                            <field name="dispensary_license"/>
+                            <field name="dispensary_address"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_receipt_tree" model="ir.ui.view">
+        <field name="name">greenlight.receipt.tree</field>
+        <field name="model">greenlight.receipt</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="receipt_number"/>
+                <field name="create_date" string="Date"/>
+                <field name="customer_name"/>
+                <field name="employee_id"/>
+                <field name="total"/>
+                <field name="total_refunded"/>
+                <field name="payment_method"/>
+                <field name="state" decoration-danger="state == 'voided'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_receipt_search" model="ir.ui.view">
+        <field name="name">greenlight.receipt.search</field>
+        <field name="model">greenlight.receipt</field>
+        <field name="arch" type="xml">
+            <search string="Receipts">
+                <field name="receipt_number"/>
+                <field name="customer_name"/>
+                <field name="customer_id"/>
+                <field name="transaction_id"/>
+                <separator/>
+                <filter name="active_receipts" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="voided_receipts" string="Voided" domain="[('state', '=', 'voided')]"/>
+                <separator/>
+                <filter name="today" string="Today" domain="[('create_date', '&gt;=', (context_today()).strftime('%%Y-%%m-%%d'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_receipt" model="ir.actions.act_window">
+        <field name="name">Receipts</field>
+        <field name="res_model">greenlight.receipt</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_receipt_search"/>
+    </record>
+
+
+    <!-- ================================================================== -->
+    <!--                         REFUND VIEWS                               -->
+    <!-- ================================================================== -->
+
+    <record id="view_refund_form" model="ir.ui.view">
+        <field name="name">greenlight.refund.form</field>
+        <field name="model">greenlight.refund</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_process" type="object"
+                            string="Process Refund" class="oe_highlight"
+                            invisible="state != 'draft'"
+                            groups="greenlight_pos.group_manager"/>
+                    <button name="action_cancel" type="object"
+                            string="Cancel" class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="refund_number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Refund Info">
+                            <field name="receipt_id"/>
+                            <field name="transaction_id"/>
+                            <field name="customer_id"/>
+                            <field name="processed_by_id" invisible="state != 'processed'"/>
+                            <field name="process_date" invisible="state != 'processed'"/>
+                        </group>
+                        <group string="Totals">
+                            <field name="refund_total"/>
+                            <field name="reason"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Refund Items">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="refund_amount"/>
+                                    <field name="cannabis_type"/>
+                                    <field name="weight_grams"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_refund_tree" model="ir.ui.view">
+        <field name="name">greenlight.refund.tree</field>
+        <field name="model">greenlight.refund</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="refund_number"/>
+                <field name="create_date" string="Date"/>
+                <field name="receipt_id"/>
+                <field name="customer_id"/>
+                <field name="refund_total"/>
+                <field name="processed_by_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_refund_search" model="ir.ui.view">
+        <field name="name">greenlight.refund.search</field>
+        <field name="model">greenlight.refund</field>
+        <field name="arch" type="xml">
+            <search string="Refunds">
+                <field name="refund_number"/>
+                <field name="receipt_id"/>
+                <field name="customer_id"/>
+                <separator/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="processed" string="Processed" domain="[('state', '=', 'processed')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_refund" model="ir.actions.act_window">
+        <field name="name">Refunds</field>
+        <field name="res_model">greenlight.refund</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_refund_search"/>
+    </record>
+
+
+    <!-- ================================================================== -->
+    <!--                     VOID WIZARD                                    -->
+    <!-- ================================================================== -->
+
+    <record id="view_receipt_void_wizard_form" model="ir.ui.view">
+        <field name="name">greenlight.receipt.void.wizard.form</field>
+        <field name="model">greenlight.receipt.void.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Void Receipt">
+                <group>
+                    <field name="receipt_id" readonly="1"/>
+                    <field name="reason" required="1" placeholder="Enter reason for voiding this receipt..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_void" type="object"
+                            string="Confirm Void" class="btn-danger oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

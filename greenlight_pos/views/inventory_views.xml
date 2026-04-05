@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =================================================================
+         Reason Code
+         ================================================================= -->
+
+    <record id="view_reason_code_form" model="ir.ui.view">
+        <field name="name">greenlight.reason.code.form</field>
+        <field name="model">greenlight.reason.code</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code_type"/>
+                        <field name="is_active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_reason_code_tree" model="ir.ui.view">
+        <field name="name">greenlight.reason.code.tree</field>
+        <field name="model">greenlight.reason.code</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code_type"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_reason_code_search" model="ir.ui.view">
+        <field name="name">greenlight.reason.code.search</field>
+        <field name="model">greenlight.reason.code</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="active" string="Active" domain="[('is_active', '=', True)]"/>
+                <separator/>
+                <filter name="type_adjustment" string="Adjustment" domain="[('code_type', '=', 'adjustment')]"/>
+                <filter name="type_void" string="Void" domain="[('code_type', '=', 'void')]"/>
+                <filter name="type_return" string="Return" domain="[('code_type', '=', 'return')]"/>
+                <filter name="type_waste" string="Waste" domain="[('code_type', '=', 'waste')]"/>
+                <separator/>
+                <filter name="group_type" string="Type" context="{'group_by': 'code_type'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reason_code" model="ir.actions.act_window">
+        <field name="name">Reason Codes</field>
+        <field name="res_model">greenlight.reason.code</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <!-- =================================================================
+         Inventory Adjustment
+         ================================================================= -->
+
+    <record id="view_inventory_adjustment_form" model="ir.ui.view">
+        <field name="name">greenlight.inventory.adjustment.form</field>
+        <field name="model">greenlight.inventory.adjustment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Adjustment Details">
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="reason_code_id"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group string="Result">
+                            <field name="stock_before"/>
+                            <field name="stock_after"/>
+                            <field name="create_date" string="Date"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_inventory_adjustment_tree" model="ir.ui.view">
+        <field name="name">greenlight.inventory.adjustment.tree</field>
+        <field name="model">greenlight.inventory.adjustment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="create_date" string="Date"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="reason_code_id"/>
+                <field name="employee_id"/>
+                <field name="stock_before"/>
+                <field name="stock_after"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_inventory_adjustment_search" model="ir.ui.view">
+        <field name="name">greenlight.inventory.adjustment.search</field>
+        <field name="model">greenlight.inventory.adjustment</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="additions" string="Additions" domain="[('quantity', '&gt;', 0)]"/>
+                <filter name="removals" string="Removals" domain="[('quantity', '&lt;', 0)]"/>
+                <separator/>
+                <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                <filter name="group_reason" string="Reason" context="{'group_by': 'reason_code_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_inventory_adjustment" model="ir.actions.act_window">
+        <field name="name">Inventory Adjustments</field>
+        <field name="res_model">greenlight.inventory.adjustment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- =================================================================
+         Inventory Count
+         ================================================================= -->
+
+    <record id="view_inventory_count_form" model="ir.ui.view">
+        <field name="name">greenlight.inventory.count.form</field>
+        <field name="model">greenlight.inventory.count</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" string="Start Count"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_complete" string="Complete Count"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'in_progress'"
+                            confirm="This will apply all discrepancies to inventory. Continue?"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'in_progress'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="total_discrepancy"/>
+                        </group>
+                        <group>
+                            <field name="create_date" string="Created"/>
+                            <field name="completed_at"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Count Items" name="items">
+                            <field name="item_ids">
+                                <list editable="bottom">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="expected_qty"/>
+                                    <field name="counted_qty"/>
+                                    <field name="discrepancy"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_inventory_count_tree" model="ir.ui.view">
+        <field name="name">greenlight.inventory.count.tree</field>
+        <field name="model">greenlight.inventory.count</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="create_date" string="Date"/>
+                <field name="employee_id"/>
+                <field name="state"/>
+                <field name="total_discrepancy"/>
+                <field name="completed_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_inventory_count_search" model="ir.ui.view">
+        <field name="name">greenlight.inventory.count.search</field>
+        <field name="model">greenlight.inventory.count</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_inventory_count" model="ir.actions.act_window">
+        <field name="name">Inventory Counts</field>
+        <field name="res_model">greenlight.inventory.count</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- =================================================================
+         Purchase Order
+         ================================================================= -->
+
+    <record id="view_purchase_order_form" model="ir.ui.view">
+        <field name="name">greenlight.purchase.order.form</field>
+        <field name="model">greenlight.purchase.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_order" string="Submit Order"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_receive" string="Receive"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'ordered'"
+                            confirm="This will add all line item quantities to product inventory. Continue?"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state not in ('draft', 'ordered')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,ordered,received"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Order Info">
+                            <field name="supplier_name"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="total_items"/>
+                            <field name="total_cost"/>
+                            <field name="ordered_at"/>
+                            <field name="received_at"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_cost"/>
+                                    <field name="subtotal"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_tree" model="ir.ui.view">
+        <field name="name">greenlight.purchase.order.tree</field>
+        <field name="model">greenlight.purchase.order</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="supplier_name"/>
+                <field name="state"/>
+                <field name="employee_id"/>
+                <field name="total_items"/>
+                <field name="total_cost"/>
+                <field name="ordered_at"/>
+                <field name="received_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_search" model="ir.ui.view">
+        <field name="name">greenlight.purchase.order.search</field>
+        <field name="model">greenlight.purchase.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="ordered" string="Ordered" domain="[('state', '=', 'ordered')]"/>
+                <filter name="received" string="Received" domain="[('state', '=', 'received')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                <filter name="group_supplier" string="Supplier" context="{'group_by': 'supplier_name'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_purchase_order" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="res_model">greenlight.purchase.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

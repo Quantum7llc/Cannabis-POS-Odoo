@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_queue_form" model="ir.ui.view">
+        <field name="name">greenlight.customer.queue.form</field>
+        <field name="model">greenlight.customer.queue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_service" type="object" string="Start Service"
+                            invisible="state != 'waiting'" class="oe_highlight"/>
+                    <button name="action_complete_service" type="object" string="Complete"
+                            invisible="state != 'being_served'" class="oe_highlight"/>
+                    <button name="action_reset_to_waiting" type="object" string="Back to Waiting"
+                            invisible="state != 'being_served'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="waiting,being_served,completed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Customer">
+                            <field name="customer_id"/>
+                            <field name="check_in_time"/>
+                            <field name="wait_minutes"/>
+                        </group>
+                        <group string="Service">
+                            <field name="served_by_id"/>
+                            <field name="served_time" invisible="state == 'waiting'"/>
+                            <field name="completed_time" invisible="state != 'completed'"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes about this visit..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_queue_tree" model="ir.ui.view">
+        <field name="name">greenlight.customer.queue.tree</field>
+        <field name="model">greenlight.customer.queue</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'waiting'"
+                  decoration-warning="state == 'being_served'"
+                  decoration-muted="state == 'completed'">
+                <field name="customer_id"/>
+                <field name="check_in_time" string="Check-In"/>
+                <field name="wait_minutes"/>
+                <field name="served_by_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_queue_search" model="ir.ui.view">
+        <field name="name">greenlight.customer.queue.search</field>
+        <field name="model">greenlight.customer.queue</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="waiting" string="Waiting"
+                        domain="[('state', '=', 'waiting')]"/>
+                <filter name="being_served" string="Being Served"
+                        domain="[('state', '=', 'being_served')]"/>
+                <filter name="active_queue" string="Active (Not Completed)"
+                        domain="[('state', '!=', 'completed')]"/>
+                <separator/>
+                <filter name="group_state" string="Status"
+                        context="{'group_by': 'state'}"/>
+                <filter name="group_employee" string="Served By"
+                        context="{'group_by': 'served_by_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_customer_queue" model="ir.actions.act_window">
+        <field name="name">Customer Queue</field>
+        <field name="res_model">greenlight.customer.queue</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active_queue': 1}</field>
+    </record>
+</odoo>

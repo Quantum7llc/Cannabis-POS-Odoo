@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dashboard_form" model="ir.ui.view">
+        <field name="name">greenlight.dashboard.form</field>
+        <field name="model">greenlight.dashboard</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Dispensary Dashboard</h1>
+                    </div>
+                    <group>
+                        <group string="Today's Sales">
+                            <field name="today_sales_total"/>
+                            <field name="transaction_count"/>
+                            <field name="avg_ticket"/>
+                        </group>
+                        <group string="Operations">
+                            <field name="queue_waiting_count"/>
+                            <field name="active_promotions_count"/>
+                            <field name="low_stock_count"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Active Shift">
+                            <field name="active_shift_employee"/>
+                            <field name="active_shift_start"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Top Products">
+                            <field name="top_products_display" readonly="1"/>
+                        </page>
+                        <page string="Hourly Sales">
+                            <field name="hourly_sales_display" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">greenlight.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

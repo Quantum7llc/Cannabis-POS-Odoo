@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">greenlight.order.form</field>
+        <field name="model">greenlight.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start"
+                            invisible="state != 'order_placed'" class="oe_highlight"/>
+                    <button name="action_ready" type="object" string="Ready for Pickup"
+                            invisible="state != 'in_progress'" class="oe_highlight"/>
+                    <button name="action_complete" type="object" string="Complete"
+                            invisible="state != 'ready_for_pickup'" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('completed', 'cancelled')" class="btn-danger"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="order_placed,in_progress,ready_for_pickup,completed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Order Info">
+                            <field name="name"/>
+                            <field name="customer_id"/>
+                            <field name="employee_id"/>
+                            <field name="source"/>
+                            <field name="requested_date"/>
+                        </group>
+                        <group string="Totals">
+                            <field name="subtotal"/>
+                            <field name="total"/>
+                            <field name="completed_date" invisible="state != 'completed'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Line Items">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="subtotal"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Customer notes or special requests..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_order_tree" model="ir.ui.view">
+        <field name="name">greenlight.order.tree</field>
+        <field name="model">greenlight.order</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'order_placed'"
+                  decoration-warning="state == 'in_progress'"
+                  decoration-success="state == 'ready_for_pickup'"
+                  decoration-muted="state in ('completed', 'cancelled')">
+                <field name="name"/>
+                <field name="create_date" string="Placed"/>
+                <field name="customer_id"/>
+                <field name="source"/>
+                <field name="line_count" string="Items"/>
+                <field name="total"/>
+                <field name="requested_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_order_search" model="ir.ui.view">
+        <field name="name">greenlight.order.search</field>
+        <field name="model">greenlight.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="active_orders" string="Active"
+                        domain="[('state', 'not in', ['completed', 'cancelled'])]"/>
+                <filter name="placed" string="Order Placed"
+                        domain="[('state', '=', 'order_placed')]"/>
+                <filter name="in_progress" string="In Progress"
+                        domain="[('state', '=', 'in_progress')]"/>
+                <filter name="ready" string="Ready for Pickup"
+                        domain="[('state', '=', 'ready_for_pickup')]"/>
+                <separator/>
+                <filter name="group_source" string="Source"
+                        context="{'group_by': 'source'}"/>
+                <filter name="group_state" string="Status"
+                        context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_order" model="ir.actions.act_window">
+        <field name="name">Orders</field>
+        <field name="res_model">greenlight.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active_orders': 1}</field>
+    </record>
+</odoo>

@@ -7,5 +7,40 @@
             <field name="prefix">TXN/%(year)s/</field>
             <field name="padding">5</field>
         </record>
+
+        <record id="seq_greenlight_inventory_adjustment" model="ir.sequence">
+            <field name="name">Green Light Inventory Adjustment</field>
+            <field name="code">greenlight.inventory.adjustment</field>
+            <field name="prefix">ADJ/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="seq_greenlight_inventory_count" model="ir.sequence">
+            <field name="name">Green Light Inventory Count</field>
+            <field name="code">greenlight.inventory.count</field>
+            <field name="prefix">CNT/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="seq_greenlight_purchase_order" model="ir.sequence">
+            <field name="name">Green Light Purchase Order</field>
+            <field name="code">greenlight.purchase.order</field>
+            <field name="prefix">PO/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="seq_greenlight_receipt" model="ir.sequence">
+            <field name="name">Green Light Receipt</field>
+            <field name="code">greenlight.receipt</field>
+            <field name="prefix">%(y)s%(month)s%(day)s-</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_greenlight_refund" model="ir.sequence">
+            <field name="name">Green Light Refund</field>
+            <field name="code">greenlight.refund</field>
+            <field name="prefix">RFD/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
     </data>
 </odoo>

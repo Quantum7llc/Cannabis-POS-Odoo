@@ -6,6 +6,8 @@
     <!-- Sales -->
     <menuitem id="menu_sales" name="Sales" parent="menu_greenlight_root" sequence="10"/>
     <menuitem id="menu_transactions" name="Transactions" parent="menu_sales" action="action_transaction" sequence="10"/>
+    <menuitem id="menu_receipts" name="Receipts" parent="menu_sales" action="action_receipt" sequence="15"/>
+    <menuitem id="menu_refunds" name="Refunds" parent="menu_sales" action="action_refund" sequence="16"/>
     <menuitem id="menu_cash_drawers" name="Cash Drawers" parent="menu_sales" action="action_cash_drawer" sequence="20"/>
 
     <!-- Catalog -->
@@ -13,12 +15,39 @@
     <menuitem id="menu_products" name="Products" parent="menu_catalog" action="action_product" sequence="10"/>
     <menuitem id="menu_categories" name="Categories" parent="menu_catalog" action="action_product_category" sequence="20"/>
 
+    <!-- Inventory -->
+    <menuitem id="menu_inventory" name="Inventory" parent="menu_greenlight_root" sequence="25"/>
+    <menuitem id="menu_inventory_adjustments" name="Adjustments"
+              parent="menu_inventory" action="action_inventory_adjustment" sequence="10"/>
+    <menuitem id="menu_inventory_counts" name="Inventory Counts"
+              parent="menu_inventory" action="action_inventory_count" sequence="20"/>
+    <menuitem id="menu_purchase_orders" name="Purchase Orders"
+              parent="menu_inventory" action="action_purchase_order" sequence="30"/>
+    <menuitem id="menu_reason_codes" name="Reason Codes"
+              parent="menu_inventory" action="action_reason_code" sequence="40"
+              groups="greenlight_pos.group_manager"/>
+
+    <!-- Orders -->
+    <menuitem id="menu_orders" name="Orders" parent="menu_greenlight_root" sequence="27"/>
+    <menuitem id="menu_orders_list" name="All Orders" parent="menu_orders" action="action_order" sequence="10"/>
+    <menuitem id="menu_queue" name="Customer Queue" parent="menu_orders" action="action_customer_queue" sequence="20"/>
+
     <!-- Patients -->
     <menuitem id="menu_patients" name="Patients" parent="menu_greenlight_root" action="action_customer" sequence="30"/>
 
     <!-- Staff -->
     <menuitem id="menu_staff" name="Staff" parent="menu_greenlight_root" sequence="40"/>
     <menuitem id="menu_employees" name="Employees" parent="menu_staff" action="action_employee" sequence="10"/>
+
+    <!-- Promotions -->
+    <menuitem id="menu_promotions" name="Promotions" parent="menu_greenlight_root" sequence="50"
+              groups="greenlight_pos.group_manager"/>
+    <menuitem id="menu_promotions_list" name="All Promotions" parent="menu_promotions"
+              action="action_promotion" sequence="10"/>
+
+    <!-- Dashboard -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="menu_greenlight_root"
+              action="action_dashboard" sequence="5"/>
 
     <!-- Configuration -->
     <menuitem id="menu_config" name="Configuration" parent="menu_greenlight_root" sequence="90"
