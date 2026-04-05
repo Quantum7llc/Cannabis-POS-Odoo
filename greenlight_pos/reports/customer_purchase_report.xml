@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- QWeb Template: Patient Purchase History for Compliance -->
+    <template id="report_customer_purchase_document">
+        <t t-call="web.html_container">
+            <t t-foreach="results" t-as="r">
+                <t t-set="customer" t-value="r['customer']"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .cp-title { text-align: center; margin-bottom: 20px; }
+                            .cp-title h2 { color: #2c3e50; margin-bottom: 5px; }
+                            .cp-title .compliance { font-size: 11px; color: #e74c3c; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+                            .cp-patient-info { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 15px; margin-bottom: 20px; }
+                            .cp-patient-info table { width: 100%; }
+                            .cp-patient-info td { padding: 3px 0; }
+                            .cp-patient-info .label { font-weight: bold; color: #555; width: 180px; }
+                            .cp-patient-info .value { color: #2c3e50; }
+                            .cp-limits { background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 12px 15px; margin-bottom: 20px; }
+                            .cp-limits h5 { margin: 0 0 8px 0; color: #856404; font-size: 12px; text-transform: uppercase; }
+                            .cp-limits .grid { display: flex; gap: 20px; }
+                            .cp-limits .metric { flex: 1; text-align: center; }
+                            .cp-limits .metric .val { font-size: 20px; font-weight: bold; color: #856404; }
+                            .cp-limits .metric .lbl { font-size: 10px; color: #856404; }
+                            .cp-txn-header { background: #34495e; color: white; padding: 8px 12px; margin-top: 15px; font-size: 12px; }
+                            .cp-txn-header .ref { font-weight: bold; }
+                            .cp-txn-header .date { float: right; }
+                            .cp-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+                            .cp-table th { background-color: #ecf0f1; color: #2c3e50; padding: 6px 10px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #bdc3c7; }
+                            .cp-table td { padding: 6px 10px; border-bottom: 1px solid #e0e0e0; font-size: 12px; }
+                            .cp-table .text-right { text-align: right; }
+                            .cp-table .text-center { text-align: center; }
+                            .cp-txn-footer { background: #ecf0f1; padding: 6px 10px; font-size: 12px; display: flex; justify-content: space-between; border-bottom: 2px solid #bdc3c7; }
+                            .cp-txn-footer .metric { }
+                            .cp-txn-footer strong { color: #2c3e50; }
+                            .cp-grand-total { background: #2c3e50; color: white; padding: 12px 15px; margin-top: 20px; border-radius: 6px; }
+                            .cp-grand-total table { width: 100%; }
+                            .cp-grand-total td { padding: 4px 0; }
+                            .cp-grand-total .label { font-weight: bold; width: 60%; }
+                            .cp-grand-total .value { text-align: right; font-size: 16px; font-weight: bold; }
+                        </style>
+
+                        <!-- Header -->
+                        <div class="cp-title">
+                            <h2>Patient Purchase History</h2>
+                            <div class="compliance">Mississippi Medical Cannabis Compliance Report</div>
+                        </div>
+
+                        <!-- Patient Information -->
+                        <div class="cp-patient-info">
+                            <table>
+                                <tr>
+                                    <td class="label">Patient Name:</td>
+                                    <td class="value" t-esc="customer.full_name"/>
+                                    <td class="label">Date of Birth:</td>
+                                    <td class="value"><span t-field="customer.dob" t-options="{'widget': 'date'}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">ID Number:</td>
+                                    <td class="value" t-esc="customer.id_number"/>
+                                    <td class="label">ID State:</td>
+                                    <td class="value" t-esc="customer.id_state"/>
+                                </tr>
+                                <tr>
+                                    <td class="label">Medical Card #:</td>
+                                    <td class="value">
+                                        <t t-if="customer.medical_card_number" t-esc="customer.medical_card_number"/>
+                                        <t t-if="not customer.medical_card_number"><em style="color: #999;">Not on file</em></t>
+                                    </td>
+                                    <td class="label">Card Expiration:</td>
+                                    <td class="value">
+                                        <t t-if="customer.medical_card_expiry">
+                                            <span t-field="customer.medical_card_expiry" t-options="{'widget': 'date'}"/>
+                                        </t>
+                                        <t t-if="not customer.medical_card_expiry"><em style="color: #999;">N/A</em></t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Recommending Physician:</td>
+                                    <td class="value">
+                                        <t t-if="customer.recommending_physician" t-esc="customer.recommending_physician"/>
+                                        <t t-if="not customer.recommending_physician"><em style="color: #999;">Not on file</em></t>
+                                    </td>
+                                    <td class="label">Loyalty Points:</td>
+                                    <td class="value" t-esc="customer.loyalty_points"/>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- MMCEU Running Totals -->
+                        <div class="cp-limits">
+                            <h5>Cumulative Purchase Totals (All Time)</h5>
+                            <div class="grid">
+                                <div class="metric">
+                                    <div class="val" t-esc="r['transaction_count']"/>
+                                    <div class="lbl">Total Transactions</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="val" t-esc="'${:,.2f}'.format(r['grand_total'])"/>
+                                    <div class="lbl">Total Spent</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="val" t-esc="'{:.2f}g'.format(r['grand_grams'])"/>
+                                    <div class="lbl">Total Weight (grams)</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="val" t-esc="'{:.2f}'.format(r['grand_mmceu'])"/>
+                                    <div class="lbl">Total MMCEU</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transaction Details -->
+                        <t t-if="r['transactions']">
+                            <t t-foreach="r['transactions']" t-as="txn">
+                                <div class="cp-txn-header">
+                                    <span class="ref" t-esc="txn['transaction'].name"/>
+                                    <span> | </span>
+                                    <span t-esc="txn['transaction'].employee_id.name"/>
+                                    <span> | </span>
+                                    <t t-if="txn['transaction'].payment_method == 'cash'">Cash</t>
+                                    <t t-if="txn['transaction'].payment_method == 'debit'">Debit</t>
+                                    <t t-if="txn['transaction'].payment_method == 'card'">Card</t>
+                                    <span class="date">
+                                        <span t-field="txn['transaction'].create_date" t-options="{'widget': 'datetime'}"/>
+                                    </span>
+                                </div>
+                                <table class="cp-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th class="text-center">Type</th>
+                                            <th class="text-right">Qty</th>
+                                            <th class="text-right">Weight (g)</th>
+                                            <th class="text-right">Unit Price</th>
+                                            <th class="text-right">Subtotal</th>
+                                            <th class="text-right">MMCEU</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="txn['lines']" t-as="line">
+                                            <tr>
+                                                <td t-esc="line['product']"/>
+                                                <td class="text-center" style="text-transform: capitalize;" t-esc="line['cannabis_type']"/>
+                                                <td class="text-right" t-esc="line['quantity']"/>
+                                                <td class="text-right" t-esc="'{:.2f}'.format(line['weight_grams'])"/>
+                                                <td class="text-right" t-esc="'${:,.2f}'.format(line['unit_price'])"/>
+                                                <td class="text-right" t-esc="'${:,.2f}'.format(line['subtotal'])"/>
+                                                <td class="text-right" t-esc="'{:.3f}'.format(line['mmceu'])"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <div class="cp-txn-footer">
+                                    <div class="metric">
+                                        <strong>Transaction Total: </strong>
+                                        <span t-field="txn['transaction'].total" t-options="{'widget': 'monetary', 'display_currency': txn['transaction'].currency_id}"/>
+                                    </div>
+                                    <div class="metric">
+                                        <strong>Weight: </strong>
+                                        <span t-esc="'{:.2f}g'.format(txn['grams_total'])"/>
+                                    </div>
+                                    <div class="metric">
+                                        <strong>MMCEU: </strong>
+                                        <span t-esc="'{:.3f}'.format(txn['mmceu_total'])"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                        <t t-if="not r['transactions']">
+                            <div style="text-align: center; padding: 40px; color: #999; font-size: 14px;">
+                                No confirmed transactions found for this patient.
+                            </div>
+                        </t>
+
+                        <!-- Grand Totals -->
+                        <div class="cp-grand-total">
+                            <table>
+                                <tr>
+                                    <td class="label">Total Transactions:</td>
+                                    <td class="value" t-esc="r['transaction_count']"/>
+                                </tr>
+                                <tr>
+                                    <td class="label">Total Amount Spent:</td>
+                                    <td class="value" t-esc="'${:,.2f}'.format(r['grand_total'])"/>
+                                </tr>
+                                <tr>
+                                    <td class="label">Total Flower-Equivalent Grams:</td>
+                                    <td class="value" t-esc="'{:.2f}g'.format(r['grand_grams'])"/>
+                                </tr>
+                                <tr>
+                                    <td class="label">Total MMCEU:</td>
+                                    <td class="value" t-esc="'{:.3f}'.format(r['grand_mmceu'])"/>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Compliance Notice -->
+                        <div style="margin-top: 20px; padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; font-size: 10px; color: #666;">
+                            <strong>Compliance Notice:</strong> Mississippi Medical Cannabis Program (MMCP) limits: 84.0g flower-equivalent / 24.0 MMCEU per rolling 30-day period. This report shows all-time purchase history for regulatory audit purposes.
+                            Report generated on <span t-esc="time.strftime('%Y-%m-%d %H:%M')"/> by <span t-esc="user.name"/>.
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

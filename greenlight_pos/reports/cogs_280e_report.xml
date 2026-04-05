@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 280E COGS Report Paper Format — Landscape for financial data -->
+    <record id="paperformat_cogs_280e" model="report.paperformat">
+        <field name="name">Green Light 280E COGS Report</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="True"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- QWeb Template: 280E COGS Summary -->
+    <template id="report_cogs_280e_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .cogs-title { text-align: center; margin-bottom: 20px; }
+                        .cogs-title h2 { color: #2c3e50; margin-bottom: 3px; }
+                        .cogs-title .subtitle { color: #555; font-size: 13px; }
+                        .cogs-title .irs-notice { font-size: 11px; color: #e74c3c; font-weight: bold; margin-top: 5px; }
+                        .cogs-title .date-range { font-size: 12px; color: #666; margin-top: 5px; }
+                        .cogs-summary { display: flex; gap: 15px; margin-bottom: 25px; }
+                        .cogs-summary .card { flex: 1; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 15px; text-align: center; }
+                        .cogs-summary .card .value { font-size: 22px; font-weight: bold; }
+                        .cogs-summary .card .label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+                        .cogs-summary .revenue .value { color: #27ae60; }
+                        .cogs-summary .cogs-val .value { color: #e74c3c; }
+                        .cogs-summary .profit .value { color: #2c3e50; }
+                        .cogs-summary .margin .value { color: #8e44ad; }
+                        .cogs-category { margin-bottom: 25px; page-break-inside: avoid; }
+                        .cogs-category-header { background: #34495e; color: white; padding: 10px 15px; font-size: 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+                        .cogs-category-header .cat-margin { font-size: 12px; font-weight: normal; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px; }
+                        .cogs-table { width: 100%; border-collapse: collapse; }
+                        .cogs-table th { background-color: #ecf0f1; color: #2c3e50; padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #bdc3c7; }
+                        .cogs-table td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; font-size: 12px; }
+                        .cogs-table .text-right { text-align: right; }
+                        .cogs-table tr:nth-child(even) { background-color: #fafafa; }
+                        .cogs-table tr.cat-total { background-color: #ecf0f1; font-weight: bold; }
+                        .cogs-table tr.cat-total td { border-top: 2px solid #95a5a6; border-bottom: 2px solid #95a5a6; }
+                        .cogs-grand { margin-top: 10px; }
+                        .cogs-grand table { width: 100%; border-collapse: collapse; }
+                        .cogs-grand th { background-color: #2c3e50; color: white; padding: 10px 12px; font-size: 12px; text-transform: uppercase; }
+                        .cogs-grand td { background-color: #2c3e50; color: white; padding: 10px 12px; font-size: 14px; font-weight: bold; }
+                        .cogs-grand .text-right { text-align: right; }
+                        .margin-positive { color: #27ae60; }
+                        .margin-negative { color: #e74c3c; }
+                        .cogs-disclaimer { margin-top: 25px; padding: 12px 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; font-size: 10px; color: #856404; }
+                        .cogs-disclaimer strong { display: block; margin-bottom: 5px; }
+                    </style>
+
+                    <!-- Header -->
+                    <div class="cogs-title">
+                        <h2>IRC Section 280E — Cost of Goods Sold Report</h2>
+                        <div class="subtitle">Cannabis Product COGS Analysis by Category</div>
+                        <div class="irs-notice">For Federal Tax Compliance Purposes</div>
+                        <div class="date-range" t-if="date_from and date_to">
+                            Period: <span t-esc="date_from.strftime('%B %d, %Y')"/> through <span t-esc="date_to.strftime('%B %d, %Y')"/>
+                        </div>
+                    </div>
+
+                    <!-- Grand Summary Cards -->
+                    <div class="cogs-summary">
+                        <div class="card revenue">
+                            <div class="value" t-esc="'${:,.2f}'.format(grand_revenue)"/>
+                            <div class="label">Gross Revenue</div>
+                        </div>
+                        <div class="card cogs-val">
+                            <div class="value" t-esc="'${:,.2f}'.format(grand_cogs)"/>
+                            <div class="label">Total COGS</div>
+                        </div>
+                        <div class="card profit">
+                            <div class="value" t-esc="'${:,.2f}'.format(grand_gross_profit)"/>
+                            <div class="label">Gross Profit</div>
+                        </div>
+                        <div class="card">
+                            <div class="value" t-esc="'${:,.2f}'.format(grand_tax)"/>
+                            <div class="label">Tax Collected</div>
+                        </div>
+                        <div class="card margin">
+                            <div class="value" t-esc="'{:.1f}%'.format(grand_margin_pct)"/>
+                            <div class="label">Overall Margin</div>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <t t-foreach="categories" t-as="cat">
+                        <div class="cogs-category">
+                            <div class="cogs-category-header">
+                                <span t-esc="cat['name']"/>
+                                <span class="cat-margin">
+                                    Margin: <span t-esc="'{:.1f}%'.format(cat['total_margin_pct'])"/>
+                                </span>
+                            </div>
+                            <table class="cogs-table">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th class="text-right">Gross Revenue</th>
+                                        <th class="text-right">COGS</th>
+                                        <th class="text-right">Tax</th>
+                                        <th class="text-right">Gross Profit</th>
+                                        <th class="text-right">Margin %</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="cat['months']" t-as="m">
+                                        <tr>
+                                            <td t-esc="m['month']"/>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(m['revenue'])"/>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(m['cogs'])"/>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(m['tax'])"/>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(m['gross_profit'])"/>
+                                            <td class="text-right">
+                                                <span t-att-class="'margin-positive' if m['margin_pct'] >= 0 else 'margin-negative'">
+                                                    <span t-esc="'{:.1f}%'.format(m['margin_pct'])"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <!-- Category Total Row -->
+                                    <tr class="cat-total">
+                                        <td>Category Total</td>
+                                        <td class="text-right" t-esc="'${:,.2f}'.format(cat['total_revenue'])"/>
+                                        <td class="text-right" t-esc="'${:,.2f}'.format(cat['total_cogs'])"/>
+                                        <td class="text-right" t-esc="'${:,.2f}'.format(cat['total_tax'])"/>
+                                        <td class="text-right" t-esc="'${:,.2f}'.format(cat['total_gross_profit'])"/>
+                                        <td class="text-right">
+                                            <span t-att-class="'margin-positive' if cat['total_margin_pct'] >= 0 else 'margin-negative'">
+                                                <span t-esc="'{:.1f}%'.format(cat['total_margin_pct'])"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+
+                    <!-- No data message -->
+                    <t t-if="not categories">
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            No confirmed transactions found in the selected records.
+                        </div>
+                    </t>
+
+                    <!-- Grand Total Row -->
+                    <t t-if="categories">
+                        <div class="cogs-grand">
+                            <table>
+                                <tr>
+                                    <th>GRAND TOTAL</th>
+                                    <th class="text-right" t-esc="'${:,.2f}'.format(grand_revenue)"/>
+                                    <th class="text-right" t-esc="'${:,.2f}'.format(grand_cogs)"/>
+                                    <th class="text-right" t-esc="'${:,.2f}'.format(grand_tax)"/>
+                                    <th class="text-right" t-esc="'${:,.2f}'.format(grand_gross_profit)"/>
+                                    <th class="text-right" t-esc="'{:.1f}%'.format(grand_margin_pct)"/>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+
+                    <!-- 280E Disclaimer -->
+                    <div class="cogs-disclaimer">
+                        <strong>IRC Section 280E Disclosure</strong>
+                        Under Internal Revenue Code Section 280E, businesses trafficking in controlled substances
+                        (Schedule I or II) may not deduct ordinary business expenses. However, Cost of Goods Sold (COGS)
+                        is an adjustment to gross receipts, not a deduction, and is therefore allowable. This report
+                        documents COGS for the purpose of computing gross income under Section 280E.
+                        <br/><br/>
+                        This report is generated for informational purposes and should be reviewed by a qualified
+                        tax professional. Report generated on <span t-esc="time.strftime('%Y-%m-%d %H:%M')"/> by <span t-esc="user.name"/>.
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

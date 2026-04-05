@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!-- Loyalty Config — Form                                        -->
+    <!-- ============================================================ -->
+    <record id="view_loyalty_config_form" model="ir.ui.view">
+        <field name="name">greenlight.loyalty.config.form</field>
+        <field name="model">greenlight.loyalty.config</field>
+        <field name="arch" type="xml">
+            <form string="Loyalty Configuration">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Program Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Earning">
+                            <field name="points_per_dollar"/>
+                            <field name="is_active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Redemption">
+                            <field name="redemption_ratio"/>
+                            <field name="min_points_to_redeem"/>
+                            <field name="max_discount_pct"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Loyalty Config — List -->
+    <record id="view_loyalty_config_list" model="ir.ui.view">
+        <field name="name">greenlight.loyalty.config.list</field>
+        <field name="model">greenlight.loyalty.config</field>
+        <field name="arch" type="xml">
+            <list string="Loyalty Configurations">
+                <field name="name"/>
+                <field name="is_active"/>
+                <field name="points_per_dollar"/>
+                <field name="redemption_ratio"/>
+                <field name="min_points_to_redeem"/>
+                <field name="max_discount_pct"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Loyalty Config — Action -->
+    <record id="action_loyalty_config" model="ir.actions.act_window">
+        <field name="name">Loyalty Configuration</field>
+        <field name="res_model">greenlight.loyalty.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Loyalty History — Form (read-only)                           -->
+    <!-- ============================================================ -->
+    <record id="view_loyalty_history_form" model="ir.ui.view">
+        <field name="name">greenlight.loyalty.history.form</field>
+        <field name="model">greenlight.loyalty.history</field>
+        <field name="arch" type="xml">
+            <form string="Loyalty History Entry" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="event_type"/>
+                            <field name="points_change"/>
+                            <field name="balance_after"/>
+                        </group>
+                        <group>
+                            <field name="transaction_id"/>
+                            <field name="employee_id"/>
+                            <field name="create_date" string="Date"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Loyalty History — List (read-only for budtenders) -->
+    <record id="view_loyalty_history_list" model="ir.ui.view">
+        <field name="name">greenlight.loyalty.history.list</field>
+        <field name="model">greenlight.loyalty.history</field>
+        <field name="arch" type="xml">
+            <list string="Loyalty History" create="0" edit="0" delete="0">
+                <field name="create_date" string="Date"/>
+                <field name="customer_id"/>
+                <field name="event_type"/>
+                <field name="points_change"/>
+                <field name="balance_after"/>
+                <field name="transaction_id" optional="show"/>
+                <field name="employee_id" optional="hide"/>
+                <field name="notes" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Loyalty History — Search -->
+    <record id="view_loyalty_history_search" model="ir.ui.view">
+        <field name="name">greenlight.loyalty.history.search</field>
+        <field name="model">greenlight.loyalty.history</field>
+        <field name="arch" type="xml">
+            <search string="Loyalty History">
+                <field name="customer_id"/>
+                <field name="transaction_id"/>
+                <field name="employee_id"/>
+                <filter name="earned" string="Earned" domain="[('event_type','=','earn')]"/>
+                <filter name="redeemed" string="Redeemed" domain="[('event_type','=','redeem')]"/>
+                <filter name="adjustments" string="Adjustments" domain="[('event_type','=','adjust')]"/>
+                <filter name="bonus" string="Bonus" domain="[('event_type','=','bonus')]"/>
+                <filter name="expired" string="Expired" domain="[('event_type','=','expire')]"/>
+                <separator/>
+                <group string="Group By">
+                    <filter name="group_customer" string="Customer" context="{'group_by': 'customer_id'}"/>
+                    <filter name="group_type" string="Event Type" context="{'group_by': 'event_type'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Loyalty History — Action -->
+    <record id="action_loyalty_history" model="ir.actions.act_window">
+        <field name="name">Loyalty History</field>
+        <field name="res_model">greenlight.loyalty.history</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_loyalty_history_search"/>
+    </record>
+</odoo>

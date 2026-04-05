@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =================================================================== -->
+    <!-- 1. Receipt Report                                                    -->
+    <!-- =================================================================== -->
+    <record id="action_report_receipt" model="ir.actions.report">
+        <field name="name">Print Receipt</field>
+        <field name="model">greenlight.receipt</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">greenlight_pos.report_receipt_document</field>
+        <field name="report_file">greenlight_pos.report_receipt_document</field>
+        <field name="paperformat_id" ref="greenlight_pos.paperformat_receipt"/>
+        <field name="binding_model_id" ref="model_greenlight_receipt"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- =================================================================== -->
+    <!-- 2. Daily Sales Report (End-of-Day Summary)                          -->
+    <!-- =================================================================== -->
+    <record id="action_report_daily_sales" model="ir.actions.report">
+        <field name="name">Daily Sales Report</field>
+        <field name="model">greenlight.closing.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">greenlight_pos.report_daily_sales_document</field>
+        <field name="report_file">greenlight_pos.report_daily_sales_document</field>
+        <field name="binding_model_id" ref="model_greenlight_closing_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- =================================================================== -->
+    <!-- 3. Inventory Stock Report                                            -->
+    <!-- =================================================================== -->
+    <record id="action_report_inventory" model="ir.actions.report">
+        <field name="name">Inventory Stock Report</field>
+        <field name="model">greenlight.product</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">greenlight_pos.report_inventory_document</field>
+        <field name="report_file">greenlight_pos.report_inventory_document</field>
+        <field name="paperformat_id" ref="greenlight_pos.paperformat_inventory"/>
+        <field name="binding_model_id" ref="model_greenlight_product"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- =================================================================== -->
+    <!-- 4. Customer Purchase History (Compliance)                            -->
+    <!-- =================================================================== -->
+    <record id="action_report_customer_purchase" model="ir.actions.report">
+        <field name="name">Patient Purchase History</field>
+        <field name="model">greenlight.customer</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">greenlight_pos.report_customer_purchase_document</field>
+        <field name="report_file">greenlight_pos.report_customer_purchase_document</field>
+        <field name="binding_model_id" ref="model_greenlight_customer"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- =================================================================== -->
+    <!-- 5. 280E COGS Report                                                  -->
+    <!-- =================================================================== -->
+    <record id="action_report_cogs_280e" model="ir.actions.report">
+        <field name="name">280E COGS Report</field>
+        <field name="model">greenlight.transaction</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">greenlight_pos.report_cogs_280e_document</field>
+        <field name="report_file">greenlight_pos.report_cogs_280e_document</field>
+        <field name="paperformat_id" ref="greenlight_pos.paperformat_cogs_280e"/>
+        <field name="binding_model_id" ref="model_greenlight_transaction"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

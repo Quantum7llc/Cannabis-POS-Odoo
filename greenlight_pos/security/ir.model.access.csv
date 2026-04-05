@@ -89,3 +89,7 @@ access_customer_analytics_manager,greenlight.customer.analytics.manager,model_gr
 access_cogs_report_manager,greenlight.cogs.report.manager,model_greenlight_cogs_report,greenlight_pos.group_manager,1,0,0,0
 access_inventory_alert_budtender,greenlight.inventory.alert.budtender,model_greenlight_inventory_alert,greenlight_pos.group_budtender,1,0,0,0
 access_inventory_alert_manager,greenlight.inventory.alert.manager,model_greenlight_inventory_alert,greenlight_pos.group_manager,1,0,0,0
+access_loyalty_config_budtender,greenlight.loyalty.config.budtender,model_greenlight_loyalty_config,greenlight_pos.group_budtender,1,0,0,0
+access_loyalty_config_manager,greenlight.loyalty.config.manager,model_greenlight_loyalty_config,greenlight_pos.group_manager,1,1,1,1
+access_loyalty_history_budtender,greenlight.loyalty.history.budtender,model_greenlight_loyalty_history,greenlight_pos.group_budtender,1,0,0,0
+access_loyalty_history_manager,greenlight.loyalty.history.manager,model_greenlight_loyalty_history,greenlight_pos.group_manager,1,1,1,1

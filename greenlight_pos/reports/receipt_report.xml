@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Receipt Paper Format — compact for standard receipt printing -->
+    <record id="paperformat_receipt" model="report.paperformat">
+        <field name="name">Green Light Receipt</field>
+        <field name="format">custom</field>
+        <field name="page_width">210</field>
+        <field name="page_height">297</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">15</field>
+        <field name="margin_right">15</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">5</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- QWeb Template: Printable Receipt -->
+    <template id="report_receipt_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .receipt-header { text-align: center; margin-bottom: 20px; }
+                            .receipt-header h2 { margin-bottom: 5px; font-size: 22px; }
+                            .receipt-header .license { font-size: 11px; color: #666; }
+                            .receipt-meta { margin-bottom: 15px; }
+                            .receipt-meta table { width: 100%; }
+                            .receipt-meta td { padding: 2px 0; }
+                            .receipt-meta .label { font-weight: bold; width: 140px; color: #555; }
+                            .receipt-items { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                            .receipt-items th { background-color: #2c3e50; color: white; padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; }
+                            .receipt-items td { padding: 8px 10px; border-bottom: 1px solid #e0e0e0; }
+                            .receipt-items tr:last-child td { border-bottom: 2px solid #2c3e50; }
+                            .receipt-items .text-right { text-align: right; }
+                            .receipt-totals { width: 100%; margin-top: 10px; }
+                            .receipt-totals td { padding: 4px 10px; }
+                            .receipt-totals .total-label { text-align: right; font-weight: bold; width: 80%; }
+                            .receipt-totals .total-value { text-align: right; width: 20%; }
+                            .receipt-totals .grand-total td { font-size: 16px; border-top: 2px solid #2c3e50; padding-top: 8px; }
+                            .receipt-footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px dashed #999; font-size: 11px; color: #666; }
+                            .receipt-number { font-size: 14px; font-weight: bold; font-family: monospace; }
+                            .status-badge { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+                            .status-active { background: #27ae60; color: white; }
+                            .status-voided { background: #e74c3c; color: white; }
+                        </style>
+
+                        <!-- Dispensary Header -->
+                        <div class="receipt-header">
+                            <h2 t-if="o.dispensary_name" t-esc="o.dispensary_name"/>
+                            <h2 t-if="not o.dispensary_name">Green Light Dispensary</h2>
+                            <div t-if="o.dispensary_address" t-esc="o.dispensary_address"/>
+                            <div class="license" t-if="o.dispensary_license">
+                                License #: <span t-esc="o.dispensary_license"/>
+                            </div>
+                        </div>
+
+                        <!-- Receipt Metadata -->
+                        <div class="receipt-meta">
+                            <table>
+                                <tr>
+                                    <td class="label">Receipt #:</td>
+                                    <td><span class="receipt-number" t-esc="o.receipt_number"/></td>
+                                    <td class="label" style="text-align: right;">Date:</td>
+                                    <td style="text-align: right;"><span t-field="o.create_date" t-options="{'widget': 'date'}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Customer:</td>
+                                    <td t-esc="o.customer_name"/>
+                                    <td class="label" style="text-align: right;">Time:</td>
+                                    <td style="text-align: right;"><span t-field="o.create_date" t-options="{'widget': 'datetime', 'format': 'hh:mm a'}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Employee:</td>
+                                    <td t-esc="o.employee_id.name"/>
+                                    <td class="label" style="text-align: right;">Payment:</td>
+                                    <td style="text-align: right;">
+                                        <t t-if="o.payment_method == 'cash'">Cash</t>
+                                        <t t-if="o.payment_method == 'debit'">Debit</t>
+                                        <t t-if="o.payment_method == 'card'">Card</t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Status:</td>
+                                    <td>
+                                        <span t-if="o.state == 'active'" class="status-badge status-active">Active</span>
+                                        <span t-if="o.state == 'voided'" class="status-badge status-voided">Voided</span>
+                                    </td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Line Items -->
+                        <table class="receipt-items">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-right">Qty</th>
+                                    <th class="text-right">Unit Price</th>
+                                    <th class="text-right">Tax</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.transaction_id.line_ids" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="line.product_id.name"/>
+                                            <br/>
+                                            <small style="color: #888;" t-if="line.product_id.sku">
+                                                SKU: <span t-esc="line.product_id.sku"/>
+                                            </small>
+                                        </td>
+                                        <td class="text-right" t-esc="line.quantity"/>
+                                        <td class="text-right">
+                                            <span t-field="line.unit_price" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.tax" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="'${:,.2f}'.format(line.subtotal + line.tax)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Totals -->
+                        <table class="receipt-totals">
+                            <tr>
+                                <td class="total-label">Subtotal:</td>
+                                <td class="total-value">
+                                    <span t-field="o.subtotal" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="total-label">Tax:</td>
+                                <td class="total-value">
+                                    <span t-field="o.tax_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="grand-total">
+                                <td class="total-label">Total:</td>
+                                <td class="total-value">
+                                    <span t-field="o.total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Refunds -->
+                        <t t-if="o.total_refunded > 0">
+                            <div style="margin-top: 10px; padding: 8px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+                                <strong>Refunds Applied:</strong>
+                                <span t-field="o.total_refunded" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            </div>
+                        </t>
+
+                        <!-- Void Info -->
+                        <t t-if="o.state == 'voided'">
+                            <div style="margin-top: 10px; padding: 8px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px;">
+                                <strong>VOIDED</strong>
+                                <t t-if="o.void_date"> on <span t-field="o.void_date" t-options="{'widget': 'datetime'}"/></t>
+                                <t t-if="o.voided_by_id"> by <span t-esc="o.voided_by_id.name"/></t>
+                                <t t-if="o.void_reason"><br/>Reason: <span t-esc="o.void_reason"/></t>
+                            </div>
+                        </t>
+
+                        <!-- Footer -->
+                        <div class="receipt-footer">
+                            <p>Thank you for your visit!</p>
+                            <p>This receipt is required for product returns.</p>
+                            <p>Please retain for your records.</p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

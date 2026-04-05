@@ -49,6 +49,14 @@
     <menuitem id="menu_promotions_list" name="All Promotions" parent="menu_promotions"
               action="action_promotion" sequence="10"/>
 
+    <!-- Loyalty -->
+    <menuitem id="menu_loyalty" name="Loyalty" parent="menu_greenlight_root" sequence="55"/>
+    <menuitem id="menu_loyalty_history" name="Points History" parent="menu_loyalty"
+              action="action_loyalty_history" sequence="10"/>
+    <menuitem id="menu_loyalty_config" name="Loyalty Settings" parent="menu_loyalty"
+              action="action_loyalty_config" sequence="20"
+              groups="greenlight_pos.group_manager"/>
+
     <!-- Dashboard -->
     <menuitem id="menu_dashboard" name="Dashboard" parent="menu_greenlight_root"
               action="action_dashboard" sequence="5"/>

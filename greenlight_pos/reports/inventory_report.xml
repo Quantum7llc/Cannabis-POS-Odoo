@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Inventory Report Paper Format — Landscape for wide tables -->
+    <record id="paperformat_inventory" model="report.paperformat">
+        <field name="name">Green Light Inventory Report</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="True"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- QWeb Template: Current Stock Listing -->
+    <template id="report_inventory_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .inv-title { text-align: center; margin-bottom: 20px; }
+                        .inv-title h2 { color: #2c3e50; margin-bottom: 5px; }
+                        .inv-title .subtitle { color: #666; font-size: 12px; }
+                        .inv-summary { display: flex; justify-content: space-between; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #dee2e6; }
+                        .inv-summary .stat { text-align: center; flex: 1; }
+                        .inv-summary .stat .value { font-size: 20px; font-weight: bold; color: #2c3e50; }
+                        .inv-summary .stat .label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+                        .inv-category { margin-bottom: 25px; }
+                        .inv-category-header { background: #34495e; color: white; padding: 8px 12px; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0; }
+                        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+                        .inv-table th { background-color: #ecf0f1; color: #2c3e50; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #bdc3c7; }
+                        .inv-table td { padding: 7px 10px; border-bottom: 1px solid #e0e0e0; font-size: 12px; }
+                        .inv-table tr:nth-child(even) { background-color: #fafafa; }
+                        .inv-table .text-right { text-align: right; }
+                        .inv-table .text-center { text-align: center; }
+                        .inv-subtotal { background-color: #ecf0f1; font-weight: bold; }
+                        .inv-subtotal td { border-top: 2px solid #95a5a6; }
+                        .inv-grand-total { background-color: #2c3e50; color: white; font-weight: bold; font-size: 13px; }
+                        .inv-grand-total td { padding: 10px; }
+                        .stock-low { color: #e74c3c; font-weight: bold; }
+                        .stock-ok { color: #27ae60; }
+                        .stock-zero { color: #e74c3c; font-weight: bold; background: #ffeaea; }
+                    </style>
+
+                    <!-- Header -->
+                    <div class="inv-title">
+                        <h2>Inventory Stock Report</h2>
+                        <div class="subtitle">
+                            Printed on <span t-esc="time.strftime('%B %d, %Y at %I:%M %p')"/> by <span t-esc="user.name"/>
+                        </div>
+                    </div>
+
+                    <!-- Summary Statistics -->
+                    <div class="inv-summary">
+                        <div class="stat">
+                            <div class="value" t-esc="total_stock"/>
+                            <div class="label">Total Units in Stock</div>
+                        </div>
+                        <div class="stat">
+                            <div class="value" t-esc="len(categories)"/>
+                            <div class="label">Categories</div>
+                        </div>
+                        <div class="stat">
+                            <div class="value" t-esc="len(docs)"/>
+                            <div class="label">Active Products</div>
+                        </div>
+                        <div class="stat">
+                            <div class="value" t-esc="'${:,.2f}'.format(total_cost_value)"/>
+                            <div class="label">Total Cost Value</div>
+                        </div>
+                        <div class="stat">
+                            <div class="value" t-esc="'${:,.2f}'.format(total_retail_value)"/>
+                            <div class="label">Total Retail Value</div>
+                        </div>
+                    </div>
+
+                    <!-- Products by Category -->
+                    <t t-foreach="categories" t-as="cat">
+                        <div class="inv-category">
+                            <div class="inv-category-header">
+                                <span t-esc="cat['name']"/>
+                                <span style="float: right; font-size: 11px; font-weight: normal;">
+                                    <span t-esc="len(cat['products'])"/> products
+                                </span>
+                            </div>
+                            <table class="inv-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 12%;">SKU</th>
+                                        <th style="width: 28%;">Product Name</th>
+                                        <th class="text-center" style="width: 8%;">Type</th>
+                                        <th class="text-right" style="width: 8%;">THC %</th>
+                                        <th class="text-right" style="width: 8%;">Weight (g)</th>
+                                        <th class="text-right" style="width: 8%;">Stock Qty</th>
+                                        <th class="text-right" style="width: 9%;">Cost</th>
+                                        <th class="text-right" style="width: 9%;">Retail</th>
+                                        <th class="text-right" style="width: 10%;">Stock Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="cat['products']" t-as="item">
+                                        <tr t-att-class="'stock-zero' if item['product'].inventory_count == 0 else ''">
+                                            <td t-esc="item['product'].sku"/>
+                                            <td t-esc="item['product'].name"/>
+                                            <td class="text-center">
+                                                <t t-if="item['product'].cannabis_type == 'flower'">Flower</t>
+                                                <t t-if="item['product'].cannabis_type == 'concentrate'">Conc.</t>
+                                                <t t-if="item['product'].cannabis_type == 'infused'">Infused</t>
+                                                <t t-if="item['product'].cannabis_type == 'accessory'">Acc.</t>
+                                            </td>
+                                            <td class="text-right">
+                                                <t t-if="item['product'].cannabis_type != 'accessory'">
+                                                    <span t-esc="'{:.1f}'.format(item['product'].thc_percentage)"/>%
+                                                </t>
+                                                <t t-if="item['product'].cannabis_type == 'accessory'">-</t>
+                                            </td>
+                                            <td class="text-right">
+                                                <t t-if="item['product'].weight_grams">
+                                                    <span t-esc="'{:.2f}'.format(item['product'].weight_grams)"/>
+                                                </t>
+                                                <t t-if="not item['product'].weight_grams">-</t>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-att-class="'stock-low' if item['product'].inventory_count &lt; 5 and item['product'].inventory_count > 0 else ('stock-ok' if item['product'].inventory_count >= 5 else '')">
+                                                    <t t-esc="item['product'].inventory_count"/>
+                                                </span>
+                                            </td>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(item['product'].cost or 0)"/>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(item['product'].price or 0)"/>
+                                            <td class="text-right" t-esc="'${:,.2f}'.format(item['retail_value'])"/>
+                                        </tr>
+                                    </t>
+                                    <!-- Category Subtotal -->
+                                    <tr class="inv-subtotal">
+                                        <td colspan="5" style="text-align: right;">Category Subtotal:</td>
+                                        <td class="text-right" t-esc="cat['subtotal_qty']"/>
+                                        <td/>
+                                        <td/>
+                                        <td class="text-right" t-esc="'${:,.2f}'.format(cat['subtotal_retail'])"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+
+                    <!-- Grand Totals -->
+                    <table class="inv-table" style="margin-top: 5px;">
+                        <tr class="inv-grand-total">
+                            <td colspan="5" style="text-align: right; width: 64%;">GRAND TOTAL:</td>
+                            <td class="text-right" style="width: 8%;" t-esc="total_stock"/>
+                            <td class="text-right" style="width: 9%;" t-esc="'${:,.2f}'.format(total_cost_value)"/>
+                            <td class="text-right" style="width: 9%;"/>
+                            <td class="text-right" style="width: 10%;" t-esc="'${:,.2f}'.format(total_retail_value)"/>
+                        </tr>
+                    </table>
+
+                    <!-- Footer Note -->
+                    <div style="text-align: center; margin-top: 20px; font-size: 10px; color: #999;">
+                        Items highlighted in red have zero stock. Items with stock below 5 are shown in red text.
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

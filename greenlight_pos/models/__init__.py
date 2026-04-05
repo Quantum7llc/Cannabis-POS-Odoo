@@ -18,3 +18,5 @@ from . import webhook
 from . import audit_log
 from . import security_role
 from . import analytics
+from . import loyalty
+from . import transaction_loyalty
