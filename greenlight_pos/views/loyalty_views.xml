@@ -105,20 +105,15 @@
         <field name="model">greenlight.loyalty.history</field>
         <field name="arch" type="xml">
             <search string="Loyalty History">
-                <field name="customer_id"/>
-                <field name="transaction_id"/>
-                <field name="employee_id"/>
                 <filter name="earned" string="Earned" domain="[('event_type','=','earn')]"/>
                 <filter name="redeemed" string="Redeemed" domain="[('event_type','=','redeem')]"/>
                 <filter name="adjustments" string="Adjustments" domain="[('event_type','=','adjust')]"/>
                 <filter name="bonus" string="Bonus" domain="[('event_type','=','bonus')]"/>
                 <filter name="expired" string="Expired" domain="[('event_type','=','expire')]"/>
                 <separator/>
-                <group string="Group By">
-                    <filter name="group_customer" string="Customer" context="{'group_by': 'customer_id'}"/>
-                    <filter name="group_type" string="Event Type" context="{'group_by': 'event_type'}"/>
-                    <filter name="group_date" string="Date" context="{'group_by': 'create_date:month'}"/>
-                </group>
+                <filter name="group_customer" string="Customer" context="{'group_by': 'customer_id'}"/>
+                <filter name="group_type" string="Event Type" context="{'group_by': 'event_type'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'create_date:month'}"/>
             </search>
         </field>
     </record>
