@@ -10,7 +10,8 @@ class GreenLightEmployee(models.Model):
     _order = "name"
 
     name = fields.Char(required=True, tracking=True)
-    pin_hash = fields.Char("PIN Hash", required=True, groups="greenlight_pos.group_admin")
+    pin_hash = fields.Char("PIN Hash", groups="greenlight_pos.group_admin")
+    pin_setup = fields.Char("PIN", store=False, help="Enter a 4-digit PIN. It will be hashed on save.")
     role = fields.Selection(
         [
             ("budtender", "Budtender"),
@@ -37,6 +38,26 @@ class GreenLightEmployee(models.Model):
     # Shift tracking
     current_shift_id = fields.Many2one("greenlight.shift", "Current Shift", readonly=True)
     transaction_ids = fields.One2many("greenlight.transaction", "employee_id")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            pin = vals.pop("pin_setup", None)
+            if pin:
+                if len(pin) != 4 or not pin.isdigit():
+                    raise ValidationError("PIN must be exactly 4 digits.")
+                vals["pin_hash"] = hashlib.sha256(pin.encode()).hexdigest()
+            if not vals.get("pin_hash"):
+                vals["pin_hash"] = hashlib.sha256("0000".encode()).hexdigest()
+        return super().create(vals_list)
+
+    def write(self, vals):
+        pin = vals.pop("pin_setup", None)
+        if pin:
+            if len(pin) != 4 or not pin.isdigit():
+                raise ValidationError("PIN must be exactly 4 digits.")
+            vals["pin_hash"] = hashlib.sha256(pin.encode()).hexdigest()
+        return super().write(vals)
 
     def set_pin(self, pin):
         """Hash and store a 4-digit PIN."""
